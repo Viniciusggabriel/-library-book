@@ -1,42 +1,41 @@
 package com.library;
 
-import com.library.dao.entities.Book;
-import com.library.server.http.setup.SetupServerHttp;
-import io.ebean.Database;
-import io.ebean.DatabaseFactory;
-import io.ebean.config.DatabaseConfig;
-import io.ebean.datasource.DataSourceConfig;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.library.infra.database.configs.DataBaseSourceConfig;
+import com.library.infra.server.configs.ServerHttpConfig;
+import com.library.infra.server.handlers.BookHandler;
+import com.library.util.errors.handlers.ServerErrorHttpHandler;
+import com.library.application.models.Book;
+import com.library.application.models.UserInLibrary;
+
+import java.util.List;
 
 public class Main {
 
+    /**
+     * Método main para execução do projeto, carrega duas outras classes de configurações
+     * Carrega a classe de configuração do banco de dados e passa uma lista com as entidades
+     * Carrega a classe do servidor http e passa os handler de rotas para o cliente acessar e os handler de erros em formato de lista
+     *
+     * @param args -> Argumentos ao executar a classe via terminal
+     * @throws Exception -> Exception exigida por classes de configuração
+     */
     public static void main(String[] args) throws Exception {
-        SetupServerHttp setupServer = new SetupServerHttp();
-        setupServer.startServer("0.0.0.0", 8000);
+        // Define o banco de dados da aplicação
+        DataBaseSourceConfig.databaseSetup(
+                List.of(
+                        Book.class,
+                        UserInLibrary.class
+                )
+        );
 
-        // TODO: Criar classe de config do hibernate
-        try {
-            // Carregar variáveis de ambiente do arquivo .env
-            Dotenv dotenv = Dotenv.load();
-
-            DataSourceConfig dataSourceConfig = new DataSourceConfig();
-            dataSourceConfig.setUsername(dotenv.get("PG_USERNAME_PROD"));
-            dataSourceConfig.setPassword(dotenv.get("PG_PASSWORD_PROD"));
-            dataSourceConfig.setUrl(dotenv.get("PG_JDBC_URL_PROD"));
-            dataSourceConfig.setSchema("library_books");
-            dataSourceConfig.setPlatform("postgres");
-
-            DatabaseConfig databaseConfig = new DatabaseConfig();
-            databaseConfig.setDataSourceConfig(dataSourceConfig);
-
-            databaseConfig.setDdlGenerate(true);
-            databaseConfig.setDdlRun(true);
-
-            databaseConfig.addClass(Book.class);
-
-            Database database = DatabaseFactory.create(databaseConfig);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Define o servidor http da aplicação
+        ServerHttpConfig.startServer(
+                List.of(
+                        BookHandler.setupBookHandler()
+                ),
+                List.of(
+                        new ServerErrorHttpHandler()
+                )
+        );
     }
 }

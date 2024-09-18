@@ -49,14 +49,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
-}
-
-tasks.register<JavaExec>("setupDatabase") {
-    mainClass.set("com.library.MainTest")
-    classpath = sourceSets["test"].runtimeClasspath
+    testImplementation("org.mockito:mockito-junit-jupiter:5.13.0")
 }
 
 tasks.test {
-    dependsOn(tasks.named("setupDatabase"))
     useJUnitPlatform()
 }
