@@ -12,6 +12,7 @@ ebean {
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
 }
 
