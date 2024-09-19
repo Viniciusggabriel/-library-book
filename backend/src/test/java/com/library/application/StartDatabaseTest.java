@@ -1,11 +1,12 @@
-package com.library.infra.database.configs;
+package com.library.application;
 
+import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.List;
+import javax.xml.crypto.Data;
 
 public class StartDatabaseTest {
 
@@ -33,10 +34,8 @@ public class StartDatabaseTest {
 
     /**
      * Define o banco de dados da aplicação e cria o sql com o EBEAN
-     *
-     * @param entityListClass -> Recebe as classes de entidade como parâmetro
      */
-    public static void databaseSetup(List<Class<?>> entityListClass) {
+    public static Database databaseTestSetup() {
         // Define a configuração que será usada para gerar o sql com o EBEAN
         DatabaseConfig databaseConfig = new DatabaseConfig();
         databaseConfig.setDataSourceConfig(setupDataSourceConfig());
@@ -44,11 +43,6 @@ public class StartDatabaseTest {
         databaseConfig.setDdlGenerate(true);
         databaseConfig.setDdlRun(true);
 
-        // Adiciona as entidades passadas por parâmetro
-        for (Class<?> entities : entityListClass) {
-            databaseConfig.addClass(entities);
-        }
-
-        DatabaseFactory.create(databaseConfig);
+        return DatabaseFactory.create(databaseConfig);
     }
 }

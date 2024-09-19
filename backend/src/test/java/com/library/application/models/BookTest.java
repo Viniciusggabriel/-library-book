@@ -15,7 +15,7 @@ class BookTest {
      */
     @BeforeAll
     public static void setUp() {
-        database = StartDatabaseTest.createTestDatabase();
+        database = StartDatabaseTest.databaseTestSetup();
     }
 
     /**

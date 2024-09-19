@@ -1,4 +1,4 @@
-package com.library.dao.entities;
+package com.library.application.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
