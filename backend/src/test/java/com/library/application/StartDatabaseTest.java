@@ -6,8 +6,6 @@ import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import javax.xml.crypto.Data;
-
 public class StartDatabaseTest {
 
     /**
@@ -23,9 +21,9 @@ public class StartDatabaseTest {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
 
         // Configurações do banco de dados para EBEAN
-        dataSourceConfig.setUsername(dotenv.get("PG_USERNAME_PROD"));
-        dataSourceConfig.setPassword(dotenv.get("PG_PASSWORD_PROD"));
-        dataSourceConfig.setUrl(dotenv.get("PG_JDBC_URL_PROD"));
+        dataSourceConfig.setUsername(dotenv.get("PG_USERNAME_TEST"));
+        dataSourceConfig.setPassword(dotenv.get("PG_PASSWORD_TEST"));
+        dataSourceConfig.setUrl(dotenv.get("PG_JDBC_URL_TEST"));
         dataSourceConfig.setSchema("library_books");
         dataSourceConfig.setPlatform("postgres");
 
