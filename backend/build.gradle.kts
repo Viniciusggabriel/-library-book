@@ -12,6 +12,7 @@ ebean {
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
 }
 
@@ -32,19 +33,21 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.0")
     testImplementation("ch.qos.logback:logback-classic:1.5.5")
 
-    // Dependências para a manipulação do banco de dados Ebean
+    // Dependências para Ebean (manipulação de banco de dados)
     implementation("io.ebean:ebean:15.5.2")
     runtimeOnly("io.ebean:ebean-agent:15.5.2")
     implementation("io.ebean:ebean-api:15.5.2")
     implementation("io.ebean:ebean-core:15.5.2")
     implementation("io.ebean:ebean-querybean:15.5.2")
     implementation("io.ebean:ebean-ddl-generator:15.5.2")
+    implementation("io.ebean:ebean-platform-postgres:15.5.2")
 
-    // Dependências para reduzir verbosidade
+    // Dependências para reduzir verbosidade com Lombok
     implementation("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     // Dependências para testes
+    testImplementation("com.h2database:h2:2.3.232")
     testImplementation("io.ebean:ebean-test:15.5.2")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

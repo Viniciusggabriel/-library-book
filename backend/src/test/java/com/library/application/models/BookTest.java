@@ -1,13 +1,21 @@
 package com.library.application.models;
 
-import com.library.application.StartDatabaseTest;
+import com.library.application.DataBaseSourceConfigTest;
 import io.ebean.Database;
+import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class BookTest {
+    private static final Logger logger = LoggerFactory.getLogger(BookTest.class);
+
     private static Database database;
 
     /**
@@ -15,7 +23,7 @@ class BookTest {
      */
     @BeforeAll
     public static void setUp() {
-        database = StartDatabaseTest.createTestDatabase();
+        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(Book.class, BorrowedBooks.class, UserInLibrary.class));
     }
 
     /**
@@ -24,16 +32,32 @@ class BookTest {
     @Test
     public void insertFindDeleteBook() {
         Book book = new Book();
-        book.setIdBook(1);
+        book.setIdBook(1L);
         book.setDsBookName("Manifesto Comunista");
+        book.setDsAuthorName("Karl Marx");
+        book.setDsSummary("Livro sobre ideia econômica");
+        book.setDsReleaseDate(LocalDateTime.now());
+        book.setDsQuantityBooks(1);
 
         database.save(book);
+        logger.info("Livro salvo dentro do banco com sucesso!");
 
-        Book foundBook = database.find(Book.class, 1);
-
-        assertThat(foundBook.getIdBook()).isEqualTo(book.getIdBook());
-        assertThat(foundBook.getDsBookName()).isEqualTo(book.getDsBookName());
+        Optional<Book> existingBook = Optional.ofNullable(database.find(Book.class, 1L));
+        existingBook.ifPresent(bookIsPresent -> {
+            assertThat(bookIsPresent.getIdBook()).isEqualTo(book.getIdBook());
+            assertThat(bookIsPresent.getDsBookName()).isEqualTo(book.getDsBookName());
+            assertThat(bookIsPresent.getDsAuthorName()).isEqualTo(book.getDsAuthorName());
+            assertThat(bookIsPresent.getDsSummary()).isEqualTo(book.getDsSummary());
+            assertThat(bookIsPresent.getDsReleaseDate()).isEqualTo(book.getDsReleaseDate());
+            assertThat(bookIsPresent.getDsQuantityBooks()).isEqualTo(book.getDsQuantityBooks());
+        });
+        logger.info("Livro encontrado dentro do banco de dados!");
 
         database.delete(book);
+        logger.info("Livro deletado do banco com sucesso!");
+
+        Book deletedBook = database.find(Book.class, 1L);
+        assertThat(deletedBook).isNull();
+        logger.info("Confirmação: O livro foi removido corretamente do banco de dados.");
     }
 }

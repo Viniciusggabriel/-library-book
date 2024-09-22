@@ -1,6 +1,7 @@
 package com.library.infra.database.configs;
 
 import io.ebean.DatabaseFactory;
+import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -25,8 +26,12 @@ public class DataBaseSourceConfig {
         dataSourceConfig.setUsername(dotenv.get("PG_USERNAME_PROD"));
         dataSourceConfig.setPassword(dotenv.get("PG_PASSWORD_PROD"));
         dataSourceConfig.setUrl(dotenv.get("PG_JDBC_URL_PROD"));
+
+        // DDL
         dataSourceConfig.setSchema("library_books");
-        dataSourceConfig.setPlatform("postgres");
+
+        // Config JDBC
+        dataSourceConfig.setPlatform(Platform.POSTGRES.name());
 
         return dataSourceConfig;
     }
@@ -41,8 +46,10 @@ public class DataBaseSourceConfig {
         DatabaseConfig databaseConfig = new DatabaseConfig();
         databaseConfig.setDataSourceConfig(setupDataSourceConfig());
 
+        // DDL
         databaseConfig.setDdlGenerate(true);
         databaseConfig.setDdlRun(true);
+        databaseConfig.setDbSchema("library_books");
 
         // Adiciona as entidades passadas por parâmetro
         for (Class<?> entities : entityListClass) {

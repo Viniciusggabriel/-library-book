@@ -1,11 +1,12 @@
 package com.library;
 
+import com.library.application.models.Book;
+import com.library.application.models.BorrowedBooks;
+import com.library.application.models.UserInLibrary;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
 import com.library.infra.server.handlers.BookHandler;
 import com.library.util.errors.handlers.ServerErrorHttpHandler;
-import com.library.application.models.Book;
-import com.library.application.models.UserInLibrary;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Main {
         DataBaseSourceConfig.databaseSetup(
                 List.of(
                         Book.class,
+                        BorrowedBooks.class,
                         UserInLibrary.class
                 )
         );
