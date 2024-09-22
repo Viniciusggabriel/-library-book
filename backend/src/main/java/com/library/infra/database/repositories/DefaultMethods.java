@@ -21,7 +21,7 @@ public interface DefaultMethods {
 
         String insertUser(T user);
 
-        String updateUser(T user, UUID id);
+        String updateUser(T user, UUID id) throws IllegalAccessException;
 
         String deleteUser(UUID id);
     }
