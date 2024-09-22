@@ -21,6 +21,7 @@ public class UserInLibrary {
     @Column(name = "DS_USERNAME", nullable = false, unique = true, length = 30)
     private String dsUserName;
 
+    // TODO: Implementar criptografia usando Bcrypt
     @Column(name = "DS_PASSWORD", nullable = false, length = 100)
     private String dsPassword;
 }
