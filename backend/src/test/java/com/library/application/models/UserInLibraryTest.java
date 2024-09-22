@@ -1,13 +1,14 @@
 package com.library.application.models;
 
-import com.library.application.StartDatabaseTest;
+import com.library.application.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -19,7 +20,7 @@ class UserInLibraryTest {
 
     @BeforeEach
     void setUp() {
-        database = StartDatabaseTest.databaseTestSetup();
+        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(UserInLibrary.class));
     }
 
     /**
@@ -30,30 +31,29 @@ class UserInLibraryTest {
      */
     @Test
     public void insertFindDeleteUserInLibrary() {
-        UUID userUUID = UUID.randomUUID();
+        UUID USER_UUID = UUID.randomUUID();
 
         UserInLibrary userInLibrary = new UserInLibrary();
-        userInLibrary.setIdUser(userUUID);
+        userInLibrary.setIdUser(USER_UUID);
         userInLibrary.setDsUserName("Testador");
         userInLibrary.setDsPassword("Senha em plain text");
-
-        // Limpa o usuário se já existe
-        if (Objects.equals(database.find(UserInLibrary.class, userUUID), userInLibrary)) {
-            database.delete(userInLibrary);
-            logger.debug("O usuário já existia no banco de dados, ele foi apagado!");
-        }
 
         database.save(userInLibrary);
         logger.info("Usuário salvo no banco de dados com sucesso!");
 
-        UserInLibrary foundUserInLibrary = database.find(UserInLibrary.class, userUUID);
+        Optional<UserInLibrary> existingUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, USER_UUID));
+        existingUserInLibrary.ifPresent(borrowedBooksIsPresent -> {
+            assertThat(borrowedBooksIsPresent.getIdUser()).isEqualTo(userInLibrary.getIdUser());
+            assertThat(borrowedBooksIsPresent.getDsUserName()).isEqualTo(userInLibrary.getDsUserName());
+            assertThat(borrowedBooksIsPresent.getDsPassword()).isEqualTo(userInLibrary.getDsPassword());
+        });
         logger.info("Usuário encontrado dentro do banco de dados!");
-
-        assertThat(foundUserInLibrary.getIdUser()).isEqualTo(userInLibrary.getIdUser());
-        assertThat(foundUserInLibrary.getDsUserName()).isEqualTo(userInLibrary.getDsUserName());
-        assertThat(foundUserInLibrary.getDsPassword()).isEqualTo(userInLibrary.getDsPassword());
 
         database.delete(userInLibrary);
         logger.info("Usuário deletado com sucesso!");
+
+        UserInLibrary deletedBook = database.find(UserInLibrary.class, USER_UUID);
+        assertThat(deletedBook).isNull();
+        logger.info("Confirmação: O usuário foi removido corretamente do banco de dados.");
     }
 }

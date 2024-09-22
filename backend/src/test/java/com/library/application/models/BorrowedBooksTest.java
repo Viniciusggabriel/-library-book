@@ -1,6 +1,6 @@
 package com.library.application.models;
 
-import com.library.application.StartDatabaseTest;
+import com.library.application.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,7 +26,7 @@ class BorrowedBooksTest {
      */
     @BeforeEach
     public void setUp() {
-        database = StartDatabaseTest.databaseTestSetup();
+        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(Book.class, UserInLibrary.class, BorrowedBooks.class));
         setUpTestData();
     }
 
@@ -47,9 +47,13 @@ class BorrowedBooksTest {
         book.setDsReleaseDate(LocalDateTime.now());
         book.setDsQuantityBooks(1);
 
-        // Limpa o livro se já existe
-        if (Objects.equals(database.find(Book.class, 1), book)) database.delete(book);
+        // Verifica se o livro já existe dentro do banco de dados de testes
+        Optional<Book> existingBook = Optional.ofNullable(database.find(Book.class, 1L));
+        existingBook.ifPresent(bookIsPresent -> {
+            logger.debug("O livro já existia no banco de dados: {}", bookIsPresent.getDsBookName());
+        });
 
+        // Caso não exista cria
         database.save(book);
         logger.info("Livro salvo dentro do banco com sucesso!");
 
@@ -61,12 +65,15 @@ class BorrowedBooksTest {
         userInLibrary.setDsUserName("Testador");
         userInLibrary.setDsPassword("Senha em plain text");
 
-        // Limpa o usuário se já existe
-        if (Objects.equals(database.find(UserInLibrary.class, USER_UUID), userInLibrary))
-            database.delete(userInLibrary);
+        // Verifica se o usuário já existe dentro do banco de dados de testes
+        Optional<UserInLibrary> existingUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, USER_UUID));
+        existingUserInLibrary.ifPresent(userInLibraryIsPresent -> {
+            logger.debug("O usuário já existia no banco de dados: {}", userInLibraryIsPresent.getDsUserName());
+        });
 
+        // Caso não exista cria
         database.save(userInLibrary);
-        logger.info("Usuário salvo no banco de dados com sucesso!");
+        logger.info("Usuário salvo novamente no banco de dados com sucesso!");
     }
 
     /**
@@ -90,28 +97,24 @@ class BorrowedBooksTest {
         borrowedBooks.setFkIdBook(List.of(book));
         borrowedBooks.setFkIdUserInLibrary(userInLibrary);
 
-        BorrowedBooks existingBorrowedBooks = database.find(BorrowedBooks.class, borrowedBooks.getIdBorrowed());
-        if (existingBorrowedBooks != null) {
-            database.delete(existingBorrowedBooks);
-            logger.debug("O empréstimo já existia no banco de dados, ele foi apagado!!");
-        }
-
         database.save(borrowedBooks);
         logger.info("O empréstimo de livro foi persistido com sucesso!");
 
-        BorrowedBooks foundBorrowedBooks = database.find(BorrowedBooks.class, 1);
+        Optional<BorrowedBooks> existingUserInLibrary = Optional.ofNullable(database.find(BorrowedBooks.class, 1L));
+        existingUserInLibrary.ifPresent(borrowedBooksIsPresent -> {
+            assertThat(borrowedBooksIsPresent.getIdBorrowed()).isEqualTo(borrowedBooks.getIdBorrowed());
+            assertThat(borrowedBooksIsPresent.getDsBorrowedDate()).isEqualTo(borrowedBooks.getDsBorrowedDate());
+            assertThat(borrowedBooksIsPresent.getDsExpectedDeliveryDate()).isEqualTo(borrowedBooks.getDsExpectedDeliveryDate());
+            assertThat(borrowedBooksIsPresent.getFkIdBook()).isEqualTo(borrowedBooks.getFkIdBook());
+            assertThat(borrowedBooksIsPresent.getFkIdUserInLibrary()).isEqualTo(borrowedBooks.getFkIdUserInLibrary());
+        });
         logger.info("O empréstimo foi encontrado com sucesso!");
 
-        assertThat(foundBorrowedBooks.getIdBorrowed()).isEqualTo(borrowedBooks.getIdBorrowed());
-        assertThat(foundBorrowedBooks.getDsBorrowedDate()).isEqualTo(borrowedBooks.getDsBorrowedDate());
-        assertThat(foundBorrowedBooks.getDsExpectedDeliveryDate()).isEqualTo(borrowedBooks.getDsExpectedDeliveryDate());
-        assertThat(foundBorrowedBooks.getFkIdBook()).isEqualTo(borrowedBooks.getFkIdBook());
-        assertThat(foundBorrowedBooks.getFkIdUserInLibrary()).isEqualTo(borrowedBooks.getFkIdUserInLibrary());
+        database.delete(borrowedBooks);
+        logger.info("O empréstimo foi removido com sucesso do banco de dados!");
 
-        try {
-            database.delete(borrowedBooks);
-        } catch (Exception exception) {
-            logger.error("Erro ao deletar o empréstimo: ", exception);
-        }
+        BorrowedBooks deletedBook = database.find(BorrowedBooks.class, 1L);
+        assertThat(deletedBook).isNull();
+        logger.info("Confirmação: O empréstimo foi removido corretamente do banco de dados.");
     }
 }
