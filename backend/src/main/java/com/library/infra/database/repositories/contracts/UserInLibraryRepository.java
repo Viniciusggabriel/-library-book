@@ -2,9 +2,9 @@ package com.library.infra.database.repositories.contracts;
 
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.repositories.DefaultMethods;
-import com.library.util.utilitarian.UpdateObjectFields;
 import com.library.util.errors.exceptions.UserInLibraryNotFound;
 import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
+import com.library.util.utilitarian.UpdateObjectFields;
 import io.ebean.Database;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.eclipse.jetty.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
+// TODO: Dar robuster ao código para que possa ter uma implementação no service
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class UserInLibraryRepository implements DefaultMethods.UserRepository<UserInLibrary> {
