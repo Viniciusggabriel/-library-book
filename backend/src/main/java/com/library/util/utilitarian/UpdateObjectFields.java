@@ -4,6 +4,7 @@ import com.library.util.errors.exceptions.EntityReferenceIllegal;
 
 import java.lang.reflect.Field;
 
+// TODO: Implementar um tratamento de erros melhor e verificar se os dois valores são nulos, caso seja e possa ser nulo ele ignora, caso não possa ele lança erros
 public class UpdateObjectFields {
     public static void updateField(Object source, Object target) throws IllegalAccessException {
         Field[] fields = source.getClass().getDeclaredFields();
