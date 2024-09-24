@@ -1,11 +1,12 @@
 package com.library.infra.database.repositories.contracts;
 
 import com.library.application.models.UserInLibrary;
-import com.library.infra.database.repositories.DefaultMethods;
+import com.library.infra.database.repositories.BaseRepositories;
+import com.library.util.errors.exceptions.EntityReferenceIllegal;
 import com.library.util.errors.exceptions.UserInLibraryNotFound;
 import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
-import com.library.util.utilitarian.UpdateObjectFields;
 import io.ebean.Database;
+import io.ebean.Finder;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
@@ -13,11 +14,14 @@ import org.eclipse.jetty.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.library.util.utilitarian.UpdateObjectFields.updateField;
+
 // TODO: Dar robuster ao código para que possa ter uma implementação no service
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserInLibraryRepository implements DefaultMethods.UserRepository<UserInLibrary> {
-    private static Database database;
+public class UserInLibraryRepository implements BaseRepositories.UserRepository<UserInLibrary> {
+    private Database database;
+    private static final UserInLibraryFinder finder = new UserInLibraryFinder();
 
     @Override
     public UserInLibrary selectUserByID(UUID id) {
@@ -29,7 +33,7 @@ public class UserInLibraryRepository implements DefaultMethods.UserRepository<Us
 
     @Override
     public String insertUser(UserInLibrary user) {
-        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, user.getDsUserName()));
+        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byUserName("dsUserName", user.getDsUserName()));
         expectedUserInLibrary.ifPresent(userInLibrary -> {
             throw new ValueIsPresentInDatabase(String.format("O usuário já existe dentro do banco de dados: %s", userInLibrary.getDsUserName()), HttpStatus.NOT_FOUND_404);
         });
@@ -39,11 +43,15 @@ public class UserInLibraryRepository implements DefaultMethods.UserRepository<Us
     }
 
     @Override
-    public String updateUser(UserInLibrary user, UUID id) throws IllegalAccessException {
+    public String updateUser(UserInLibrary user, UUID id) {
         UserInLibrary userInDatabase = selectUserByID(id);
 
-        UpdateObjectFields.updateField(userInDatabase, user);
-        database.update(userInDatabase);
+        try {
+            UserInLibrary userUpdated = updateField(userInDatabase, user);
+            database.update(userUpdated);
+        } catch (IllegalAccessException exception) {
+            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()));
+        }
 
         return "Usuário foi alterado com sucesso!";
     }
@@ -57,3 +65,30 @@ public class UserInLibraryRepository implements DefaultMethods.UserRepository<Us
         return "Usuário deletado com sucesso!";
     }
 }
+
+
+class UserInLibraryFinder extends Finder<UUID, UserInLibrary> {
+
+    public UserInLibraryFinder() {
+        super(UserInLibrary.class);
+    }
+
+    public UserInLibrary byUserName(String atribute, String userName) {
+        return query().where().eq(atribute, userName).findOne();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
