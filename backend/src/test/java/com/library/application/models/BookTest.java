@@ -1,6 +1,6 @@
 package com.library.application.models;
 
-import com.library.application.DataBaseSourceConfigTest;
+import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;

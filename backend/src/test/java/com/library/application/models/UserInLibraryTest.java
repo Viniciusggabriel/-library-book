@@ -1,6 +1,6 @@
 package com.library.application.models;
 
-import com.library.application.DataBaseSourceConfigTest;
+import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,19 +33,16 @@ class UserInLibraryTest {
     public void insertFindDeleteUserInLibrary() {
         UUID USER_UUID = UUID.randomUUID();
 
-        UserInLibrary userInLibrary = new UserInLibrary();
-        userInLibrary.setIdUser(USER_UUID);
-        userInLibrary.setDsUserName("Testador");
-        userInLibrary.setDsPassword("Senha em plain text");
+        UserInLibrary userInLibrary = new UserInLibrary(USER_UUID, "Testador", "Senha em plain text");
 
         database.save(userInLibrary);
         logger.info("Usuário salvo no banco de dados com sucesso!");
 
         Optional<UserInLibrary> existingUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, USER_UUID));
-        existingUserInLibrary.ifPresent(borrowedBooksIsPresent -> {
-            assertThat(borrowedBooksIsPresent.getIdUser()).isEqualTo(userInLibrary.getIdUser());
-            assertThat(borrowedBooksIsPresent.getDsUserName()).isEqualTo(userInLibrary.getDsUserName());
-            assertThat(borrowedBooksIsPresent.getDsPassword()).isEqualTo(userInLibrary.getDsPassword());
+        existingUserInLibrary.ifPresent(userIsPresent -> {
+            assertThat(userIsPresent.getIdUser()).isEqualTo(userInLibrary.getIdUser());
+            assertThat(userIsPresent.getDsUserName()).isEqualTo(userInLibrary.getDsUserName());
+            assertThat(userIsPresent.getDsPassword()).isEqualTo(userInLibrary.getDsPassword());
         });
         logger.info("Usuário encontrado dentro do banco de dados!");
 

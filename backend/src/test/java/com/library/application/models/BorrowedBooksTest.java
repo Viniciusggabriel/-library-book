@@ -1,6 +1,6 @@
 package com.library.application.models;
 
-import com.library.application.DataBaseSourceConfigTest;
+import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,16 +59,12 @@ class BorrowedBooksTest {
 
         // Configurar o usuário
         UUID USER_UUID = UUID.randomUUID();
-
-        userInLibrary = new UserInLibrary();
-        userInLibrary.setIdUser(USER_UUID);
-        userInLibrary.setDsUserName("Testador");
-        userInLibrary.setDsPassword("Senha em plain text");
+        UserInLibrary userInLibrary = new UserInLibrary(USER_UUID, "Testador", "Senha em plain text");
 
         // Verifica se o usuário já existe dentro do banco de dados de testes
         Optional<UserInLibrary> existingUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, USER_UUID));
-        existingUserInLibrary.ifPresent(userInLibraryIsPresent -> {
-            logger.debug("O usuário já existia no banco de dados: {}", userInLibraryIsPresent.getDsUserName());
+        existingUserInLibrary.ifPresent(userIsPresent -> {
+            logger.debug("O usuário já existia no banco de dados: {}", userIsPresent.getDsUserName());
         });
 
         // Caso não exista cria
@@ -90,12 +86,7 @@ class BorrowedBooksTest {
      */
     @Test
     public void insertFindDeleteBorrowedBooks() {
-        BorrowedBooks borrowedBooks = new BorrowedBooks();
-        borrowedBooks.setIdBorrowed(1L);
-        borrowedBooks.setDsBorrowedDate(LocalDateTime.now());
-        borrowedBooks.setDsExpectedDeliveryDate(LocalDateTime.now().plusWeeks(1));
-        borrowedBooks.setFkIdBook(List.of(book));
-        borrowedBooks.setFkIdUserInLibrary(userInLibrary);
+        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, LocalDateTime.now(), LocalDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
 
         database.save(borrowedBooks);
         logger.info("O empréstimo de livro foi persistido com sucesso!");
