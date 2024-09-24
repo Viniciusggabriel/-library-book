@@ -18,10 +18,10 @@ public class DataBaseSourceConfigTest {
     private static final Logger logger = LoggerFactory.getLogger(DataBaseSourceConfigTest.class);
 
     /**
-     * Define os valores padrões para a conexão do banco de dados, os valores são carregados via variáveis de ambiente
-     * Define qual banco de dados será usado no caso é usado o banco de dados H2 para testes
+     * <h3>Define os valores padrões para a conexão do banco de dados, os valores são carregados via variáveis de ambiente</h3>
+     * <p>Define qual banco de dados será usado no caso é usado o banco de dados H2 para testes</p>
      *
-     * @return -> DataSourceConfig retorna a configuração de um banco de dados
+     * @return -> <strong>DataSourceConfig retorna a configuração de um banco de dados</strong>
      */
     private static DataSourceConfig setupDataSourceConfig() {
         // Carregar variáveis de ambiente do arquivo .env
@@ -53,8 +53,8 @@ public class DataBaseSourceConfigTest {
     }
 
     /**
-     * Define o banco de dados da aplicação e cria o sql com o EBEAN
-     * Define as entidades que serão usadas nos testes
+     * <h3>Define o banco de dados da aplicação que ira cria o sql com o EBEAN</3>
+     * <p>Define as entidades que serão usadas nos testes</p>
      */
     public static Database databaseTestSetup(List<Class<?>> entityListClass) {
         // Define a configuração que será usada para gerar o sql com o EBEAN

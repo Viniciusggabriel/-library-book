@@ -13,12 +13,12 @@ public class ServerHttpConfig {
     private static final Logger logger = LoggerFactory.getLogger(ServerHttpConfig.class);
 
     /**
-     * Define a configuração dos servidores no momento usa somente o servidor HTTP
-     * Recebe as classes de handlers e errorHandlers
+     * <h3>Define a configuração dos servidores no momento usa somente o servidor HTTP</h3>
+     * <p>Recebe as classes de handlers e errorHandlers</p>
      *
-     * @param routsHandlers      -> Rotas da api que serão usadas pelo cliente ao acessar a aplicação
-     * @param exceptionsHandlers -> Handlers der erros que serão usados para retornar
-     * @throws Exception -> Exception padrão para tratamento de erros dentro do servidor
+     * @param routsHandlers      -> <strong>Rotas da api que serão usadas pelo cliente ao acessar a aplicação</strong>
+     * @param exceptionsHandlers -> <strong>Handlers der erros que serão usados para retornar</strong>
+     * @throws Exception -> <strong>Exception padrão para tratamento de erros dentro do servidor</strong>
      */
     public static void startServer(List<Handler> routsHandlers, List<ErrorHandler> exceptionsHandlers) throws Exception {
         Server server = null;

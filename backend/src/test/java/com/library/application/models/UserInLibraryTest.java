@@ -18,16 +18,17 @@ class UserInLibraryTest {
 
     private Database database;
 
+    /**
+     * <h2>Instancia antes do teste a configuração de banco de dados</h2>
+     */
     @BeforeEach
     void setUp() {
         database = DataBaseSourceConfigTest.databaseTestSetup(List.of(UserInLibrary.class));
     }
 
     /**
-     * Método para realizar testes de insert, find e delete na entidade de UserInLibrary
-     * <p>
-     * Esse método criar objeto usuário e busca no banco de dados, se achar ele deleta e passa o teste, caso não ache ele salva o usuário, busca e deleta ele após compara os resultados
-     * </p>
+     * <h3>Método para realizar testes de insert, find e delete na entidade de UserInLibrary</h3>
+     * <p> Esse método criar objeto usuário e busca no banco de dados, se achar ele deleta e passa o teste, caso não ache ele salva o usuário, busca e deleta ele após compara os resultados</p>
      */
     @Test
     public void insertFindDeleteUserInLibrary() {
@@ -49,8 +50,8 @@ class UserInLibraryTest {
         database.delete(userInLibrary);
         logger.info("Usuário deletado com sucesso!");
 
-        UserInLibrary deletedBook = database.find(UserInLibrary.class, USER_UUID);
-        assertThat(deletedBook).isNull();
+        UserInLibrary deletedUser = database.find(UserInLibrary.class, USER_UUID);
+        assertThat(deletedUser).isNull();
         logger.info("Confirmação: O usuário foi removido corretamente do banco de dados.");
     }
 }

@@ -22,7 +22,7 @@ class BorrowedBooksTest {
     private UserInLibrary userInLibrary;
 
     /**
-     * Carrega as configurações do banco de dados antes de iniciar o teste
+     * <h2>Instancia antes do teste a configuração de banco de dados</h2>
      */
     @BeforeEach
     public void setUp() {
@@ -31,11 +31,9 @@ class BorrowedBooksTest {
     }
 
     /**
-     * Método para realizar a pré-configuração das dependências necessárias para testar a entidade BorrowedBooks.
-     * <p>
-     * Este método cria um usuário e um livro como exemplos, que serão utilizados durante os testes da entidade
-     * de empréstimos.
-     * </p>
+     * <h3>Método para realizar a pré-configuração das dependências necessárias para testar a entidade BorrowedBooks.</h3>
+     * <p>Este método cria um usuário e um livro como exemplos, que serão utilizados durante os testes da entidade
+     * de empréstimos.</p>
      */
     private void setUpTestData() {
         // Configurar o livro

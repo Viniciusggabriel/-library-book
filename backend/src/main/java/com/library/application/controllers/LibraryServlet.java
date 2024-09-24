@@ -11,12 +11,12 @@ import java.util.Objects;
 
 public class LibraryServlet extends HttpServlet {
     /**
-     * Método que define um verbo get do protocolo HTTP e define a resposta como json e realiza no momento respostas vagas para testes
+     * <h3>Método que define um verbo get do protocolo HTTP e define a resposta como json e realiza no momento respostas vagas para testes</h3>
      *
-     * @param req  -> Requisição do usuário
-     * @param resp -> Resposta a ser retornada
-     * @throws ServletException -> Tratamento de erros http
-     * @throws IOException      -> Tratamento de erros de entrada e saida de dados
+     * @param req  -> <strong>Requisição do usuário</strong>
+     * @param resp -> <strong>Resposta a ser retornada</strong>
+     * @throws ServletException -> <strong>Tratamento de erros http</strong>
+     * @throws IOException      -> <strong>Tratamento de erros de entrada e saida de dados</strong>
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

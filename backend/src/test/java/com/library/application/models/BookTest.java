@@ -19,7 +19,7 @@ class BookTest {
     private static Database database;
 
     /**
-     * Carrega as configurações do banco de dados antes de iniciar o teste
+     * <h2>Instancia antes do teste a configuração de banco de dados</h2>
      */
     @BeforeAll
     public static void setUp() {
@@ -27,7 +27,7 @@ class BookTest {
     }
 
     /**
-     * Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente
+     *<h3> Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente</h3>
      */
     @Test
     public void insertFindDeleteBook() {

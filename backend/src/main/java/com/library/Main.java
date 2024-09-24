@@ -13,12 +13,12 @@ import java.util.List;
 public class Main {
 
     /**
-     * Método main para execução do projeto, carrega duas outras classes de configurações
-     * Carrega a classe de configuração do banco de dados e passa uma lista com as entidades
-     * Carrega a classe do servidor http e passa os handler de rotas para o cliente acessar e os handler de erros em formato de lista
+     * <h3>Método principal para execução do projeto, carrega duas outras classes de configurações</h3>
+     * <p>Carrega a classe de configuração do banco de dados e passa uma lista com as entidades</p>
+     * <p>Carrega a classe do servidor http e passa os handler de rotas para o cliente acessar e os handler de erros em formato de lista</p>
      *
-     * @param args -> Argumentos ao executar a classe via terminal
-     * @throws Exception -> Exception exigida por classes de configuração
+     * @param args -> <strong>Argumentos ao executar a classe via terminal</strong>
+     * @throws Exception -> <strong>Exception exigida por classes de configuração</strong>
      */
     public static void main(String[] args) throws Exception {
         // Define o banco de dados da aplicação

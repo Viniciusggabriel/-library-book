@@ -3,6 +3,9 @@ package com.library.infra.database.repositories;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * <h1>Interface principal para métodos dos repositórios</h1>
+ */
 public interface BaseRepositories {
     interface CrudRepository<T, ID> {
         List<T> selectEntities();
@@ -19,10 +22,10 @@ public interface BaseRepositories {
     interface UserRepository<T> {
         T selectUserByID(UUID id);
 
-        String insertUser(T user);
+        void insertUser(T user);
 
-        String updateUser(T user, UUID id) throws IllegalAccessException;
+        void updateUser(T user, UUID id) throws IllegalAccessException;
 
-        String deleteUser(UUID id);
+        void deleteUser(UUID id);
     }
 }
