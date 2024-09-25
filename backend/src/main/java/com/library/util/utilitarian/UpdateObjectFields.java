@@ -1,6 +1,7 @@
 package com.library.util.utilitarian;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class UpdateObjectFields {
 
@@ -22,6 +23,11 @@ public class UpdateObjectFields {
 
         for (Field field : fields) {
             field.setAccessible(true);
+
+            // Ignora campos que fazem parte da class Collection
+            if (Collection.class.isAssignableFrom(field.getType())) {
+                continue;
+            }
 
             try {
                 Object sourceValue = field.get(source);
