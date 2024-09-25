@@ -1,5 +1,6 @@
 package com.library.application.models;
 
+import io.ebean.Database;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class Book {
     @Column(name = "DS_QUANTITY_BOOK", nullable = false)
     private Integer dsQuantityBooks;
 
-    @ManyToMany(mappedBy = "fkIdBook")
+    @ManyToMany(mappedBy = "fkIdBook", cascade = CascadeType.ALL)
     private List<BorrowedBooks> borrowedBooks;
 
     @Override
