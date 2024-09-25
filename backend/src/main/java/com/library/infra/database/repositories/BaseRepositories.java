@@ -8,15 +8,15 @@ import java.util.UUID;
  */
 public interface BaseRepositories {
     interface CrudRepository<T, ID> {
-        List<T> selectEntities();
+        List<T> selectEntities(Integer sizeRows);
 
         T selectEntityById(ID id);
 
-        String insertEntity(T entity);
+        void insertEntity(T entity);
 
-        String updateEntity(T entity, ID id);
+        void updateEntity(T entity, ID id);
 
-        String deleteEntity(ID id);
+        void deleteEntity(ID id);
     }
 
     interface UserRepository<T> {

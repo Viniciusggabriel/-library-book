@@ -3,8 +3,8 @@ package com.library.infra.database.repositories.contracts;
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.repositories.BaseRepositories;
 import com.library.util.errors.exceptions.EntityReferenceIllegal;
-import com.library.util.errors.exceptions.UserInLibraryNotFound;
 import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
+import com.library.util.errors.exceptions.ValueNotFound;
 import io.ebean.Database;
 import io.ebean.Finder;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
     @Override
     public UserInLibrary selectUserByID(UUID id) {
         Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, id));
-        expectedUserInLibrary.orElseThrow(() -> new UserInLibraryNotFound("O usuário não foi encontrado!", HttpStatus.NOT_FOUND_404));
+        expectedUserInLibrary.orElseThrow(() -> new ValueNotFound("O usuário não foi encontrado!", HttpStatus.NOT_FOUND_404));
 
         return expectedUserInLibrary.get();
     }
@@ -47,9 +47,13 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
      */
     @Override
     public void insertUser(UserInLibrary user) {
+        if (user.getDsUserName() == null || user.getDsUserName().isEmpty()) {
+            throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio!");
+        }
+
         Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byUserName("dsUserName", user.getDsUserName()));
-        expectedUserInLibrary.ifPresent(userInLibrary -> {
-            throw new ValueIsPresentInDatabase(String.format("O usuário já existe dentro do banco de dados: %s", userInLibrary.getDsUserName()), HttpStatus.NOT_FOUND_404);
+        expectedUserInLibrary.ifPresent(userIsPresent -> {
+            throw new ValueIsPresentInDatabase(String.format("O usuário já existe dentro do banco de dados: %s", userIsPresent.getDsUserName()), HttpStatus.NOT_FOUND_404);
         });
 
         database.save(user);
