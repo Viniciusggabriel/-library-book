@@ -12,7 +12,6 @@ ebean {
 }
 
 repositories {
-    gradlePluginPortal()
     mavenCentral()
 }
 
@@ -41,6 +40,9 @@ dependencies {
     implementation("io.ebean:ebean-querybean:15.5.2")
     implementation("io.ebean:ebean-ddl-generator:15.5.2")
     implementation("io.ebean:ebean-platform-postgres:15.5.2")
+
+    // Criptografia
+    implementation("at.favre.lib:bcrypt:0.10.2")
 
     // Dependências para reduzir verbosidade com Lombok
     implementation("org.projectlombok:lombok:1.18.34")
