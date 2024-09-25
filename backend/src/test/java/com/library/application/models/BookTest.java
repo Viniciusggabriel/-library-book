@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,7 +22,7 @@ class BookTest {
      */
     @BeforeAll
     public static void setUp() {
-        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(Book.class, BorrowedBooks.class, UserInLibrary.class));
+        database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, BorrowedBooks.class, UserInLibrary.class});
     }
 
     /**

@@ -26,7 +26,7 @@ class UserInLibraryRepositoryTest {
      */
     @BeforeEach
     void setUp() {
-        Database database = DataBaseSourceConfigTest.databaseTestSetup(List.of(UserInLibrary.class));
+        Database database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{UserInLibrary.class});
         userInLibraryRepository = new UserInLibraryRepository(database);
     }
 

@@ -7,8 +7,8 @@ import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
 import com.library.infra.server.handlers.BookHandler;
 import com.library.util.errors.handlers.ServerErrorHttpHandler;
-
-import java.util.List;
+import org.eclipse.jetty.ee10.servlet.ErrorHandler;
+import org.eclipse.jetty.server.Handler;
 
 public class Main {
 
@@ -23,21 +23,22 @@ public class Main {
     public static void main(String[] args) throws Exception {
         // Define o banco de dados da aplicação
         DataBaseSourceConfig.databaseSetup(
-                List.of(
+                new Class[]{
                         Book.class,
                         BorrowedBooks.class,
                         UserInLibrary.class
-                )
+
+                }
         );
 
         // Define o servidor http da aplicação
         ServerHttpConfig.startServer(
-                List.of(
+                new Handler[]{
                         BookHandler.setupBookHandler()
-                ),
-                List.of(
+                },
+                new ErrorHandler[]{
                         new ServerErrorHttpHandler()
-                )
+                }
         );
     }
 }

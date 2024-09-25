@@ -6,6 +6,7 @@ import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.sql.Array;
 import java.util.List;
 
 public class DataBaseSourceConfig {
@@ -41,7 +42,7 @@ public class DataBaseSourceConfig {
      *
      * @param entityListClass -> <strong>Recebe as classes de entidade como parâmetro</strong>
      */
-    public static void databaseSetup(List<Class<?>> entityListClass) {
+    public static void databaseSetup(Class<?>[] entityListClass) {
         // Define a configuração que será usada para gerar o sql com o EBEAN
         DatabaseConfig databaseConfig = new DatabaseConfig();
         databaseConfig.setDataSourceConfig(setupDataSourceConfig());

@@ -56,7 +56,7 @@ public class DataBaseSourceConfigTest {
      * <h3>Define o banco de dados da aplicação que ira cria o sql com o EBEAN</3>
      * <p>Define as entidades que serão usadas nos testes</p>
      */
-    public static Database databaseTestSetup(List<Class<?>> entityListClass) {
+    public static Database databaseTestSetup(Class<?>[] entityListClass) {
         // Define a configuração que será usada para gerar o sql com o EBEAN
         DatabaseConfig databaseConfig = new DatabaseConfig();
         databaseConfig.setDataSourceConfig(setupDataSourceConfig());

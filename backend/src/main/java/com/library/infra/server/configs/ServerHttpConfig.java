@@ -7,8 +7,6 @@ import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 public class ServerHttpConfig {
     private static final Logger logger = LoggerFactory.getLogger(ServerHttpConfig.class);
 
@@ -20,7 +18,7 @@ public class ServerHttpConfig {
      * @param exceptionsHandlers -> <strong>Handlers der erros que serão usados para retornar</strong>
      * @throws Exception -> <strong>Exception padrão para tratamento de erros dentro do servidor</strong>
      */
-    public static void startServer(List<Handler> routsHandlers, List<ErrorHandler> exceptionsHandlers) throws Exception {
+    public static void startServer(Handler[] routsHandlers, ErrorHandler[] exceptionsHandlers) throws Exception {
         Server server = null;
 
         try {

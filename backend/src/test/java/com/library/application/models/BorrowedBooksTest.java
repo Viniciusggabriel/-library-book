@@ -26,7 +26,7 @@ class BorrowedBooksTest {
      */
     @BeforeEach
     public void setUp() {
-        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(Book.class, UserInLibrary.class, BorrowedBooks.class));
+        database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, UserInLibrary.class, BorrowedBooks.class});
         setUpTestData();
     }
 
