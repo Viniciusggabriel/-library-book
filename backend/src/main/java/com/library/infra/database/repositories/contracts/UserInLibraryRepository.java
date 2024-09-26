@@ -2,12 +2,11 @@ package com.library.infra.database.repositories.contracts;
 
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.repositories.BaseRepositories;
+import com.library.infra.database.repositories.finders.EntityFinder;
 import com.library.util.errors.exceptions.EntityReferenceIllegal;
 import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
 import com.library.util.errors.exceptions.ValueNotFound;
 import io.ebean.Database;
-import io.ebean.Finder;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -16,12 +15,11 @@ import java.util.UUID;
 
 import static com.library.util.utilitarian.UpdateObjectFields.updateField;
 
-@AllArgsConstructor
 @RequiredArgsConstructor
 public class UserInLibraryRepository implements BaseRepositories.UserRepository<UserInLibrary> {
-    private Database database;
+    private final Database database;
 
-    private static final UserInLibraryFinder finder = new UserInLibraryFinder();
+    private static final EntityFinder<Long, UserInLibrary> finder = new EntityFinder<>(UserInLibrary.class);
 
     /**
      * <h3>Método responsável por buscar o usuário pelo UUID</h3>
@@ -51,7 +49,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
             throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio!");
         }
 
-        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byUserName("dsUserName", user.getDsUserName()));
+        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byName("dsUserName", user.getDsUserName()));
         expectedUserInLibrary.ifPresent(userIsPresent -> {
             throw new ValueIsPresentInDatabase(String.format("O usuário já existe dentro do banco de dados: %s", userIsPresent.getDsUserName()), HttpStatus.NOT_FOUND_404);
         });
@@ -92,37 +90,3 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
         database.delete(userInDatabase);
     }
 }
-
-
-class UserInLibraryFinder extends Finder<UUID, UserInLibrary> {
-
-    public UserInLibraryFinder() {
-        super(UserInLibrary.class);
-    }
-
-    /**
-     * <h3>Método para buscar usuários pelo username</h3>
-     *
-     * @param atribute -> <strong>Atributo dentro da entidade</strong>
-     * @param userName -> <strong>Username do usuário a ser deletado</strong>
-     * @return UserInLibrary -> <strong>Usuário encontrado</strong>
-     */
-    public UserInLibrary byUserName(String atribute, String userName) {
-        return query().where().eq(atribute, userName).findOne();
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
