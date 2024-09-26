@@ -1,13 +1,21 @@
 package com.library.application.models;
 
-import jakarta.persistence.*;
+import java.util.List;
+import java.util.Objects;
+
+import org.joda.time.LocalDateTime;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.LocalDateTime;
-
-import java.util.List;
-import java.util.Objects;
 
 @Data
 @Entity
@@ -35,7 +43,7 @@ public class Book {
     @Column(name = "DS_QUANTITY_BOOK", nullable = false)
     private Integer dsQuantityBooks;
 
-    @ManyToMany(mappedBy = "fkIdBook")
+    @ManyToMany(mappedBy = "fkIdBook", cascade = CascadeType.ALL)
     private List<BorrowedBooks> borrowedBooks;
 
     @Override

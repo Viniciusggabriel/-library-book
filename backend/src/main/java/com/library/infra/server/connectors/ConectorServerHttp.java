@@ -12,11 +12,11 @@ public class ConectorServerHttp {
     private static final Logger logger = LoggerFactory.getLogger(ConectorServerHttp.class);
 
     /**
-     * Método responsável por definir o connector http do projeto
-     * Busca o host e a porta http dentro das variáveis de ambiente
+     * <h3>Método responsável por definir o connector http do projeto</h3>
+     * <p>Busca o host e a porta http dentro das variáveis de ambiente</p>
      *
-     * @param server -> Pede o servidor para poder realizar a configuração necessária do conector
-     * @return ServerConnector -> Retorna o connector HTTP configurado
+     * @param server -> <strong>Pede o servidor para poder realizar a configuração necessária do conector</strong>
+     * @return ServerConnector -> <strong>Retorna o connector HTTP configurado</strong>
      */
     public static ServerConnector setupHttpServerConnector(Server server) {
         try {

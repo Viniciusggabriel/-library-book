@@ -6,9 +6,9 @@ import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 public class BookHandler {
 
     /**
-     * Handler para definir as rotas dentro da api pra executar operações com os livros
+     * <h3>Handler para definir as rotas dentro da api pra executar operações com os livros</h3>
      *
-     * @return ServletContextHandler -> Retorna um context para ser usado pelo servidor
+     * @return ServletContextHandler -> <strong>Retorna um context para ser usado pelo servidor</strong>
      */
     public static ServletContextHandler setupBookHandler() {
         // Define Jarkarta context handler

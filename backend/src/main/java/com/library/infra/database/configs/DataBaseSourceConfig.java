@@ -6,14 +6,12 @@ import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.util.List;
-
 public class DataBaseSourceConfig {
 
     /**
-     * Define os valores padrões para a conexão do banco de dados, os valores são carregados via variáveis de ambiente
+     * <h3>Define os valores padrões para a conexão do banco de dados, os valores são carregados via variáveis de ambiente</h3>
      *
-     * @return -> DataSourceConfig retorna a configuração de um banco de dados
+     * @return DataSourceConfig -> <strong>retorna a configuração de um banco de dados</strong>
      */
     private static DataSourceConfig setupDataSourceConfig() {
         // Carregar variáveis de ambiente do arquivo .env
@@ -37,11 +35,11 @@ public class DataBaseSourceConfig {
     }
 
     /**
-     * Define o banco de dados da aplicação e cria o sql com o EBEAN
+     * <h3>Define o banco de dados da aplicação e cria o sql com o EBEAN</h3>
      *
-     * @param entityListClass -> Recebe as classes de entidade como parâmetro
+     * @param entityListClass -> <strong>Recebe as classes de entidade como parâmetro</strong>
      */
-    public static void databaseSetup(List<Class<?>> entityListClass) {
+    public static void databaseSetup(Class<?>[] entityListClass) {
         // Define a configuração que será usada para gerar o sql com o EBEAN
         DatabaseConfig databaseConfig = new DatabaseConfig();
         databaseConfig.setDataSourceConfig(setupDataSourceConfig());

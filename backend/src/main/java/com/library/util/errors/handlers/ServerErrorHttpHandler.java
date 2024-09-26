@@ -14,14 +14,14 @@ public class ServerErrorHttpHandler extends ErrorHandler {
     private static final Logger logger = LoggerFactory.getLogger(ServerErrorHttpHandler.class);
 
     /**
-     * Método responsável por retornar erros que serão lançados para o usuário caso os controllers não consigam validar a requisição
+     * <h3>Método responsável por retornar erros que serão lançados para o usuário caso os controllers não consigam validar a requisição.</h3>
      *
-     * @param baseRequest -> Serve para pegar os dados base da requisição
-     * @param request     -> Pega os valores que foram requisitado
-     * @param response    -> Define o que será respondido
-     * @param code        -> Define o status code a ser usado
-     * @param message     -> Define a mensagem quer será retornada
-     * @throws IOException -> Exception de entrada é saida de dados
+     * @param baseRequest -> <strong>Serve para pegar os dados base da requisição</strong>
+     * @param request     -> <strong>Pega os valores que foram requisitado</strong>
+     * @param response    -> <strong>Define o que será respondido</strong>
+     * @param code        -> <strong>Define o status code a ser usado</strong>
+     * @param message     -> <strong>Define a mensagem quer será retornada</strong>
+     * @throws IOException -> <strong>Exception de entrada é saida de dados</strong>
      */
     @Override
     protected void generateAcceptableResponse(ServletContextRequest baseRequest, HttpServletRequest request, HttpServletResponse response, int code, String message) throws IOException {

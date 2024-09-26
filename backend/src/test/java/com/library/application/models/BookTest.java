@@ -1,6 +1,6 @@
 package com.library.application.models;
 
-import com.library.application.DataBaseSourceConfigTest;
+import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -19,15 +18,15 @@ class BookTest {
     private static Database database;
 
     /**
-     * Carrega as configurações do banco de dados antes de iniciar o teste
+     * <h2>Instancia antes do teste a configuração de banco de dados</h2>
      */
     @BeforeAll
     public static void setUp() {
-        database = DataBaseSourceConfigTest.databaseTestSetup(List.of(Book.class, BorrowedBooks.class, UserInLibrary.class));
+        database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, BorrowedBooks.class, UserInLibrary.class});
     }
 
     /**
-     * Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente
+     *<h3> Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente</h3>
      */
     @Test
     public void insertFindDeleteBook() {
