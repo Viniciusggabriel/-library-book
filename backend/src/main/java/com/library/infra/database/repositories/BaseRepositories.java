@@ -14,7 +14,7 @@ public interface BaseRepositories {
 
         void insertEntity(T entity);
 
-        void updateEntity(T entity, ID id);
+        void updateEntity(T entity, ID id) throws IllegalAccessException;
 
         void deleteEntity(ID id);
     }

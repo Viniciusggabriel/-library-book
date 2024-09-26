@@ -80,7 +80,7 @@ class BookRepositoryTest {
     }
 
     /**
-     * <h3>Teste para verificar se o código faz uma busca de vários itens dentro do banco de dados</h3>
+     * <h3>Teste para verificar se a busca de vários itens dentro do banco de dados está sendo executada com sucesso</h3>
      */
     @Test
     public void selectAllBooks() {
