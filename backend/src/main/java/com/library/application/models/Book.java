@@ -1,14 +1,21 @@
 package com.library.application.models;
 
-import io.ebean.Database;
-import jakarta.persistence.*;
+import java.util.List;
+import java.util.Objects;
+
+import org.joda.time.LocalDateTime;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.LocalDateTime;
-
-import java.util.List;
-import java.util.Objects;
 
 @Data
 @Entity

@@ -6,9 +6,6 @@ import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.sql.Array;
-import java.util.List;
-
 public class DataBaseSourceConfig {
 
     /**
