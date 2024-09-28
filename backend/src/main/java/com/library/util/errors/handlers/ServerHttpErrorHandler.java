@@ -41,7 +41,7 @@ public class ServerErrorHttpHandler extends ErrorHandler {
             writer.write(jsonResponse);
 
         } catch (Exception exception) {
-            logger.error("Erro ao mandar erros de requisição para o usuário!: ", exception);
+            logger.error("Não foi possível enviar erros ao usuário!: ", exception);
         }
     }
 }
