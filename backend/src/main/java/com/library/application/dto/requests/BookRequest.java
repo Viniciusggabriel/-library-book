@@ -1,7 +1,8 @@
 package com.library.application.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.LocalDateTime;
+
+import java.time.ZonedDateTime;
 
 public record BookRequest(
         @JsonProperty("ds_book_name")
@@ -11,7 +12,7 @@ public record BookRequest(
         String dsAuthorName,
 
         @JsonProperty("ds_release_date")
-        LocalDateTime dsReleaseDate,
+        ZonedDateTime dsReleaseDate,
 
         @JsonProperty("ds_summary")
         String dsSummary,
