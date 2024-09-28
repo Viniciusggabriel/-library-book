@@ -23,11 +23,6 @@ public class LibraryServlet extends HttpServlet {
         resp.setContentType("application/json;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
 
-        if (Objects.equals(req.getMethod(), "get")) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            throw new PortHttpServerException("Erro de teste");
-        }
-
         resp.getWriter().write("Ola");
     }
 }
