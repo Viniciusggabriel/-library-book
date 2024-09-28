@@ -27,6 +27,9 @@ dependencies {
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     implementation("org.eclipse.jetty.ee10:jetty-ee10-servlet:12.0.13")
 
+    // Dependência para compatibilidade do jackson
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
+
     // Dependências para logging
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("org.slf4j:slf4j-simple:2.0.0")
@@ -45,6 +48,7 @@ dependencies {
     implementation("at.favre.lib:bcrypt:0.10.2")
 
     // Dependências para reduzir verbosidade com Lombok
+    compileOnly("org.projectlombok:lombok:1.18.34")
     implementation("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
