@@ -1,21 +1,14 @@
 package com.library.application.models;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.joda.time.LocalDateTime;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.LocalDateTime;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -35,7 +28,8 @@ public class Book {
     private String dsAuthorName;
 
     @Column(name = "DS_RELEASE_DATE")
-    private LocalDateTime dsReleaseDate;
+    @Convert(converter = ZonedDateTime.class)
+    private ZonedDateTime dsReleaseDate;
 
     @Column(name = "DS_SUMMARY", columnDefinition = "TEXT", length = 500)
     private String dsSummary;

@@ -1,7 +1,10 @@
 package com.library.application.dto.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.LocalDateTime;
+
+import java.time.ZonedDateTime;
 
 
 public record BookResponse(
@@ -14,7 +17,7 @@ public record BookResponse(
         @JsonProperty("_data_book")
         DataBook dataBook
 ) {
-        public static BookResponse of(Long idBook, Integer dsQuantityBooks, String dsBookName, String dsAuthorName, LocalDateTime dsReleaseDate, String dsSummary) {
+        public static BookResponse of(Long idBook, Integer dsQuantityBooks, String dsBookName, String dsAuthorName, ZonedDateTime dsReleaseDate, String dsSummary) {
                 return new BookResponse(idBook, dsQuantityBooks, new DataBook(dsBookName, dsAuthorName, dsReleaseDate, dsSummary));
         }
 
@@ -25,8 +28,9 @@ public record BookResponse(
                 @JsonProperty("ds_author_name")
                 String dsAuthorName,
 
+                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
                 @JsonProperty("ds_release_date")
-                LocalDateTime dsReleaseDate,
+                ZonedDateTime dsReleaseDate,
 
                 @JsonProperty("ds_summary")
                 String dsSummary
