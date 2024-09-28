@@ -5,12 +5,13 @@ import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
 import org.joda.time.LocalDateTime;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public record BorrowedBooksRequest(
         @JsonProperty("ds_expected_delivery_date")
-        LocalDateTime dsExpectedDeliveryDate,
+        ZonedDateTime dsExpectedDeliveryDate,
 
         @JsonProperty("_id_user")
         UUID fkIdUserInLibrary,

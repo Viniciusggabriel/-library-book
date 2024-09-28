@@ -16,6 +16,11 @@ import java.util.Optional;
 public class ServletGetBookById extends HttpServlet {
     private final BookCrudService bookCrudService;
 
+
+    public ServletGetBookById() {
+        this.bookCrudService = new BookCrudService();
+    }
+
     /**
      * <h3>Método que define um verbo get do protocolo HTTP e define a resposta como json e realiza no momento respostas vagas para testes</h3>
      *
@@ -26,12 +31,28 @@ public class ServletGetBookById extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idBook = extractIdBook(req);
-        validateIdBook(idBook);
+        String idBook;
+
+        try {
+            idBook = extractIdBook(req);
+            validateIdBook(idBook);
+        } catch (RequestPathIllegalReference exception) {
+            throw new ServletException(exception);
+        }
+
+        char[] jsonBook;
+        try {
+            jsonBook = bookCrudService.getBookById(idBook);
+
+            if (jsonBook == null)
+                throw new ServletException("Erro ao montar json com o livro!");
+        } catch (Exception exception) {
+            throw new ServletException(exception);
+        }
 
         resp.setContentType("application/json;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(bookCrudService.getBookById(idBook));
+        resp.getWriter().write(jsonBook);
     }
 
     private String extractIdBook(HttpServletRequest req) throws RequestPathIllegalReference {
@@ -42,7 +63,7 @@ public class ServletGetBookById extends HttpServlet {
 
     private void validateIdBook(String idBook) throws RequestPathIllegalReference {
         if (idBook == null || idBook.isEmpty()) {
-            throw new RequestPathIllegalReference("O id da requisição não pode ser nulo!");
+            throw new RequestPathIllegalReference("O id da requisição não pode ser nulo!", HttpStatus.BAD_REQUEST_400);
         }
     }
 }

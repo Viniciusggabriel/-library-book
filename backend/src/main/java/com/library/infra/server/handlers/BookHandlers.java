@@ -17,7 +17,7 @@ public class BookHandlers {
 
         // Define a rota da api para buscar um livro pelo ID
         servletContextHandler.setContextPath("/v1/");
-        servletContextHandler.addServlet(new ServletHolder(ServletGetBookById.class), "/list/book/*");
+        servletContextHandler.addServlet(new ServletHolder(new ServletGetBookById()), "/list/book/*");
 
         return servletContextHandler;
     }

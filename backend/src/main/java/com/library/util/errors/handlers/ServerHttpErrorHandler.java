@@ -1,9 +1,15 @@
 package com.library.util.errors.handlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.library.util.errors.exceptions.InputOutputDataErros;
+import com.library.util.errors.exceptions.ValueNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.ee10.servlet.ErrorHandler;
 import org.eclipse.jetty.ee10.servlet.ServletContextRequest;
+import org.eclipse.jetty.http.HttpException;
+import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,23 +31,43 @@ public class ServerHttpErrorHandler extends ErrorHandler {
      */
     @Override
     protected void generateAcceptableResponse(ServletContextRequest baseRequest, HttpServletRequest request, HttpServletResponse response, int code, String message) throws IOException {
-        // Definir tipo de conteúdo e código de status
         response.setContentType("application/json;charset=utf-8");
-        response.setStatus(code);
 
-        // Pegar a exceção da request, se existir no caso o Throwable
         Throwable throwable = (Throwable) request.getAttribute("jakarta.servlet.error.exception");
 
-        // Extrair apenas a mensagem da exceção, sem o nome da classe
-        String errorMessage = (throwable != null) ? throwable.getMessage() : message;
+        ObjectMapper objectMapper = new ObjectMapper(); // Jackson ObjectMapper
+        ObjectNode jsonResponse = objectMapper.createObjectNode(); // Cria um nó JSON
 
-        // Escrever a resposta em JSON
         try (PrintWriter writer = response.getWriter()) {
-            String jsonResponse = String.format("{\"status\": %d, \"message\": \"%s\"}", code, errorMessage);
-            writer.write(jsonResponse);
+            String errorMessage = (throwable != null && throwable.getMessage() != null) ? throwable.getMessage() : message;
 
+            // Limpa a mensagem de erro, se necessário
+            if (errorMessage.contains(":")) {
+                errorMessage = errorMessage.substring(errorMessage.indexOf(":") + 1).trim();
+            }
+
+            if (throwable != null) {
+                // Tentativa de obter o código de status da exceção
+                if (throwable instanceof ValueNotFound) {
+                    code = ((ValueNotFound) throwable).getHttpStatus();
+                    response.setStatus(code);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+            }
+
+            // Preenche o nó JSON com os dados
+            jsonResponse.put("status", code);
+            jsonResponse.put("message", errorMessage);
+
+            // Escreve a resposta JSON
+            writer.write(objectMapper.writeValueAsString(jsonResponse));
+        } catch (IOException exception) {
+            logger.error("Erro ao enviar resposta JSON: ", exception);
+            throw new InputOutputDataErros("Erro ao realizar transição de dados: " + exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR_500);
         } catch (Exception exception) {
-            logger.error("Não foi possível enviar erros ao usuário!: ", exception);
+            logger.error("Erro ao manipular requisição: ", exception);
+            throw new InputOutputDataErros("Erro ao realizar transição de dados: " + exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
 }
