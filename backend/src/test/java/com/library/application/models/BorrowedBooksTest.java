@@ -2,12 +2,12 @@ package com.library.application.models;
 
 import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,7 @@ class BorrowedBooksTest {
         book.setDsBookName("Manifesto Comunista");
         book.setDsAuthorName("Karl Marx");
         book.setDsSummary("Livro sobre ideia econômica");
-        book.setDsReleaseDate(LocalDateTime.now());
+        book.setDsReleaseDate(ZonedDateTime.now().withNano(0));
         book.setDsQuantityBooks(1);
 
         // Verifica se o livro já existe dentro do banco de dados de testes
@@ -84,7 +84,7 @@ class BorrowedBooksTest {
      */
     @Test
     public void insertFindDeleteBorrowedBooks() {
-        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, LocalDateTime.now(), LocalDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
+        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, ZonedDateTime.now().withNano(0), ZonedDateTime.now().withNano(0).plusWeeks(1), userInLibrary, List.of(book));
 
         database.save(borrowedBooks);
         logger.info("O empréstimo de livro foi persistido com sucesso!");

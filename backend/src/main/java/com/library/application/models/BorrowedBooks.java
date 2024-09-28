@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.LocalDateTime;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -19,11 +20,13 @@ public class BorrowedBooks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBorrowed;
 
+    @Convert(converter = ZonedDateTime.class)
     @Column(name = "DS_BORROWED_DATE", nullable = false)
-    private LocalDateTime dsBorrowedDate = LocalDateTime.now();
+    private ZonedDateTime dsBorrowedDate = ZonedDateTime.now();
 
+    @Convert(converter = ZonedDateTime.class)
     @Column(name = "DS_EXPECTED_DELIVERY_DATE", nullable = false)
-    private LocalDateTime dsExpectedDeliveryDate;
+    private ZonedDateTime dsExpectedDeliveryDate;
 
     @ManyToOne
     @JoinColumn(name = "FK_USER_IN_LIBRARY")

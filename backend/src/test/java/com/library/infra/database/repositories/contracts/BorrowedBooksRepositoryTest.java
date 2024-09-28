@@ -6,12 +6,12 @@ import com.library.application.models.BorrowedBooks;
 import com.library.application.models.UserInLibrary;
 import com.library.util.errors.exceptions.ValueNotFound;
 import io.ebean.Database;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +51,7 @@ class BorrowedBooksRepositoryTest {
         book.setDsBookName("Manifesto Comunista");
         book.setDsAuthorName("Karl Marx");
         book.setDsSummary("Livro sobre ideia econômica");
-        book.setDsReleaseDate(LocalDateTime.now());
+        book.setDsReleaseDate(ZonedDateTime.now().withNano(0));
         book.setDsQuantityBooks(1);
 
         // Verifica se o livro já existe dentro do banco de dados de testes
@@ -81,14 +81,14 @@ class BorrowedBooksRepositoryTest {
 
     @Test
     public void insertUpdateFindDeleteBorrowedBooks() {
-        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, LocalDateTime.now(), LocalDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
+        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, ZonedDateTime.now().withNano(0), ZonedDateTime.now().withNano(0).plusWeeks(1), userInLibrary, List.of(book));
         logger.info("O objeto de empréstimo foi criado!");
 
         borrowedBooksRepository.insertEntity(borrowedBooks);
         logger.info("O empréstimo foi salvo com sucesso!");
 
         BorrowedBooks bookForUpdate = new BorrowedBooks();
-        bookForUpdate.setDsExpectedDeliveryDate(new LocalDateTime().plusWeeks(3));
+        bookForUpdate.setDsExpectedDeliveryDate(ZonedDateTime.now().withNano(0).plusWeeks(3));
 
         borrowedBooksRepository.updateEntity(bookForUpdate, 1L);
         logger.info("O livro foi alterado com sucesso!");
@@ -124,7 +124,7 @@ class BorrowedBooksRepositoryTest {
 
         BorrowedBooks borrowedBook;
         for (int value = 1; value <= 10; value++) {
-            borrowedBook = new BorrowedBooks((long) value, LocalDateTime.now(), LocalDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
+            borrowedBook = new BorrowedBooks((long) value, ZonedDateTime.now(), ZonedDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
 
             borrowedBooks.add(borrowedBook);
         }

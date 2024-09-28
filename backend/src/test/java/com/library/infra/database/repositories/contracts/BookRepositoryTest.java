@@ -6,12 +6,12 @@ import com.library.application.models.BorrowedBooks;
 import com.library.application.models.UserInLibrary;
 import com.library.util.errors.exceptions.ValueNotFound;
 import io.ebean.Database;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +43,7 @@ class BookRepositoryTest {
         book.setDsBookName("Manifesto Comunista");
         book.setDsAuthorName("Karl Marx");
         book.setDsSummary("Livro sobre ideia econômica");
-        book.setDsReleaseDate(LocalDateTime.now());
+        book.setDsReleaseDate(ZonedDateTime.now().withNano(0));
         book.setDsQuantityBooks(1);
         logger.info("O objeto de livro foi criado!");
 
@@ -93,7 +93,7 @@ class BookRepositoryTest {
             book.setDsBookName("Livro " + value);
             book.setDsAuthorName("Autor " + value);
             book.setDsSummary("Resumo do livro " + value);
-            book.setDsReleaseDate(LocalDateTime.now());
+            book.setDsReleaseDate(ZonedDateTime.now().withNano(0));
             book.setDsQuantityBooks(1);
 
             books.add(book);

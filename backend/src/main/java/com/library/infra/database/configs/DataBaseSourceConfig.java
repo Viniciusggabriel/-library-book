@@ -1,12 +1,16 @@
 package com.library.infra.database.configs;
 
+import io.ebean.Database;
 import io.ebean.DatabaseFactory;
 import io.ebean.annotation.Platform;
 import io.ebean.config.DatabaseConfig;
 import io.ebean.datasource.DataSourceConfig;
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.Getter;
 
 public class DataBaseSourceConfig {
+    @Getter
+    private static Database database;
 
     /**
      * <h3>Define os valores padrões para a conexão do banco de dados, os valores são carregados via variáveis de ambiente</h3>
@@ -54,6 +58,6 @@ public class DataBaseSourceConfig {
             databaseConfig.addClass(entities);
         }
 
-        DatabaseFactory.create(databaseConfig);
+        database = DatabaseFactory.create(databaseConfig);
     }
 }

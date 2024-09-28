@@ -2,12 +2,12 @@ package com.library.application.models;
 
 import com.library.DataBaseSourceConfigTest;
 import io.ebean.Database;
-import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -35,7 +35,7 @@ class BookTest {
         book.setDsBookName("Manifesto Comunista");
         book.setDsAuthorName("Karl Marx");
         book.setDsSummary("Livro sobre ideia econômica");
-        book.setDsReleaseDate(LocalDateTime.now());
+        book.setDsReleaseDate(ZonedDateTime.now().withNano(0));
         book.setDsQuantityBooks(1);
 
         database.save(book);

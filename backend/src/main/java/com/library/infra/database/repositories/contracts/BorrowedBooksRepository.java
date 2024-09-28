@@ -48,7 +48,7 @@ public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<
             BorrowedBooks borrowedBooksUpdated = updateField(borrowedBooksInDatabase, entity);
             database.update(borrowedBooksUpdated);
         } catch (IllegalAccessException exception) {
-            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial da entidade: %s", exception.getMessage()));
+            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial da entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
 
