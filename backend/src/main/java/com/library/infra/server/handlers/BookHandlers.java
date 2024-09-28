@@ -1,9 +1,10 @@
 package com.library.infra.server.handlers;
 
-import com.library.application.controllers.LibraryServlet;
+import com.library.application.controllers.ServletGetBookById;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 
-public class BookHandler {
+public class BookHandlers {
 
     /**
      * <h3>Handler para definir as rotas dentro da api pra executar operações com os livros</h3>
@@ -14,9 +15,9 @@ public class BookHandler {
         // Define Jarkarta context handler
         ServletContextHandler servletContextHandler = new ServletContextHandler();
 
-        // Define as rotas da api
+        // Define a rota da api para buscar um livro pelo ID
         servletContextHandler.setContextPath("/v1/");
-        servletContextHandler.addServlet(LibraryServlet.class, "/list/book");
+        servletContextHandler.addServlet(new ServletHolder(ServletGetBookById.class), "/list/book/*");
 
         return servletContextHandler;
     }

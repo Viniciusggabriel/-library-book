@@ -21,7 +21,6 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
 
     private static final EntityFinder<Long, Book> finder = new EntityFinder<>(Book.class);
 
-
     /**
      * <h3>Método responsável por buscar vários livros de forma paginada dentro do banco de dados</h3>
      * <p>Utiliza a classe Finder do EBEAN para poder realizar uma consulta páginada com um numero de linhas e ordenado pelo nome do livro</p>
