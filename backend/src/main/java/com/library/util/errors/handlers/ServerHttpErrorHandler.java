@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class ServerErrorHttpHandler extends ErrorHandler {
-    private static final Logger logger = LoggerFactory.getLogger(ServerErrorHttpHandler.class);
+public class ServerHttpErrorHandler extends ErrorHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ServerHttpErrorHandler.class);
 
     /**
      * <h3>Método responsável por retornar erros que serão lançados para o usuário caso os controllers não consigam validar a requisição.</h3>

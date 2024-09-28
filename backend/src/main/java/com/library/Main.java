@@ -5,8 +5,8 @@ import com.library.application.models.BorrowedBooks;
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
-import com.library.infra.server.handlers.BookHandler;
-import com.library.util.errors.handlers.ServerErrorHttpHandler;
+import com.library.infra.server.handlers.BookHandlers;
+import com.library.util.errors.handlers.ServerHttpErrorHandler;
 import org.eclipse.jetty.ee10.servlet.ErrorHandler;
 import org.eclipse.jetty.server.Handler;
 
@@ -34,10 +34,10 @@ public class Main {
         // Define o servidor http da aplicação
         ServerHttpConfig.startServer(
                 new Handler[]{
-                        BookHandler.setupBookHandler()
+                        BookHandlers.setupBookHandler()
                 },
                 new ErrorHandler[]{
-                        new ServerErrorHttpHandler()
+                        new ServerHttpErrorHandler()
                 }
         );
     }
