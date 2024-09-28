@@ -1,12 +1,15 @@
 package com.library.util.errors.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class EntityReferenceIllegal extends RuntimeException {
-    public EntityReferenceIllegal(String message) {
-        super(message);
-    }
+    private final Integer httpStatus;
 
     public EntityReferenceIllegal(String message, Integer httpStatus) {
         super(String.format("message: %s, status: %d", message, httpStatus));
-
+        this.httpStatus = httpStatus;
     }
 }
