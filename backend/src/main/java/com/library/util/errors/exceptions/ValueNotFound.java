@@ -1,15 +1,9 @@
 package com.library.util.errors.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.library.util.errors.throwables.ApplicationRuntimeException;
 
-@Getter
-@AllArgsConstructor
-public class ValueNotFound extends RuntimeException {
-    private final Integer httpStatus;
-
+public class ValueNotFound extends ApplicationRuntimeException {
     public ValueNotFound(String message, Integer httpStatus) {
-        super(String.format("message: %s, status: %d", message, httpStatus));
-        this.httpStatus = httpStatus;
+        super(message, httpStatus);
     }
 }
