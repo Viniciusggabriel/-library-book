@@ -17,8 +17,8 @@ public class BookCrudService {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
     }
 
-    public char[] getBookById(String idBook) throws JsonProcessingException {
-        Book bookInDatabase = bookRepository.selectEntityById(Long.valueOf(idBook));
+    public char[] getBookById(Long idBook) throws JsonProcessingException {
+        Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
         ObjectMapper objectMapper = new ObjectMapper();
 

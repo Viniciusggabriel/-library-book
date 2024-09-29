@@ -28,7 +28,7 @@ public record BookResponse(
                 @JsonProperty("ds_author_name")
                 String dsAuthorName,
 
-                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
                 @JsonProperty("ds_release_date")
                 ZonedDateTime dsReleaseDate,
 

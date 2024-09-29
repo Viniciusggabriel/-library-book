@@ -1,7 +1,7 @@
 package com.library.infra.server.connectors;
 
-import com.library.util.errors.exceptions.InternalServerException;
-import com.library.util.errors.exceptions.PortHttpServerException;
+import com.library.util.errors.exceptions.InternalServerRuntimeException;
+import com.library.util.errors.exceptions.PortHttpServerRuntimeException;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Server;
@@ -33,11 +33,11 @@ public class ConectorServerHttp {
 
         } catch (NumberFormatException exception) {
             logger.error("Erro ao converter a porta do servidor HTTP para número. Verifique a variável 'SERVER_HTTP_PORT' no arquivo .env.", exception);
-            throw new PortHttpServerException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502); // Repassa a mensagem de erro para uma exceção personalizada
+            throw new PortHttpServerRuntimeException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502); // Repassa a mensagem de erro para uma exceção personalizada
 
         } catch (Exception exception) {
             logger.error("Erro ao configurar o servidor HTTP.", exception);
-            throw new InternalServerException(String.format("Falha na configuração do ServerConnector: %s", exception.getMessage()));
+            throw new InternalServerRuntimeException(String.format("Falha na configuração do ServerConnector: %s", exception.getMessage()));
         }
     }
 }

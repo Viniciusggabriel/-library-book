@@ -31,13 +31,14 @@ public class ServletGetBookById extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idBook;
+        String extractIdBook;
+        Long idBook;
 
         try {
-            idBook = extractIdBook(req);
-            validateIdBook(idBook);
+            extractIdBook = extractIdBook(req);
+            idBook = validateIdBook(extractIdBook);
         } catch (RequestPathIllegalReference exception) {
-            throw new ServletException(exception);
+            throw new RequestPathIllegalReference(exception.getMessage(), exception.getStatusCode(), exception.getCause());
         }
 
         char[] jsonBook;
@@ -47,7 +48,7 @@ public class ServletGetBookById extends HttpServlet {
             if (jsonBook == null)
                 throw new ServletException("Erro ao montar json com o livro!");
         } catch (Exception exception) {
-            throw new ServletException(exception);
+            throw new RequestPathIllegalReference(exception.getMessage(), HttpStatus.BAD_GATEWAY_502, exception.getCause());
         }
 
         resp.setContentType("application/json;charset=utf-8");
@@ -57,13 +58,19 @@ public class ServletGetBookById extends HttpServlet {
 
     private String extractIdBook(HttpServletRequest req) throws RequestPathIllegalReference {
         return Optional.ofNullable(req.getPathInfo())
-                .map(path -> path.substring(1))
+                .map(path -> path.substring(1)) // Remove a barra inicial
                 .orElseThrow(() -> new RequestPathIllegalReference("Não foi possível extrair o ID do livro na sua requisição!", HttpStatus.BAD_REQUEST_400));
     }
 
-    private void validateIdBook(String idBook) throws RequestPathIllegalReference {
-        if (idBook == null || idBook.isEmpty()) {
+    private Long validateIdBook(String idBook) throws RequestPathIllegalReference {
+        if (idBook == null) {
             throw new RequestPathIllegalReference("O id da requisição não pode ser nulo!", HttpStatus.BAD_REQUEST_400);
+        }
+
+        try {
+            return Long.valueOf(idBook);
+        } catch (NumberFormatException exception) {
+            throw new RequestPathIllegalReference("O id da requisição deve ser um número válido!", HttpStatus.BAD_REQUEST_400, new RuntimeException(exception.getMessage()));
         }
     }
 }
