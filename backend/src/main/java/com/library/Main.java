@@ -2,6 +2,7 @@ package com.library;
 
 import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
+import com.library.application.models.ClientInLibrary;
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
@@ -26,6 +27,7 @@ public class Main {
                 new Class[]{
                         Book.class,
                         BorrowedBooks.class,
+                        ClientInLibrary.class,
                         UserInLibrary.class
 
                 }

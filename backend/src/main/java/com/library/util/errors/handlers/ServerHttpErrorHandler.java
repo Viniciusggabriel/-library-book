@@ -47,7 +47,7 @@ public class ServerHttpErrorHandler extends ErrorHandler {
             message = applicationRuntimeException.getMessage();
 
         } else if (throwable instanceof ApplicationServletException applicationServletException) {
-            statusCode = applicationServletException.getStatusCode();
+            statusCode = applicationServletException.getHttpStatus();
             message = applicationServletException.getMessage();
             cause = applicationServletException.getCause();
 

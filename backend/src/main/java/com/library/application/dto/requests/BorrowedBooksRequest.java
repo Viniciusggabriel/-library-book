@@ -3,7 +3,6 @@ package com.library.application.dto.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
-import org.joda.time.LocalDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -26,7 +25,7 @@ public record BorrowedBooksRequest(
 
         return new BorrowedBooksRequest(
                 borrowedBooks.getDsExpectedDeliveryDate(),
-                borrowedBooks.getFkIdUserInLibrary() != null ? borrowedBooks.getFkIdUserInLibrary().getIdUser() : null,
+                borrowedBooks.getFkIdClientInLibrary() != null ? borrowedBooks.getFkIdClientInLibrary().getIdClient() : null,
                 bookIds
         );
     }
