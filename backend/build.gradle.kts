@@ -35,6 +35,9 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:2.0.0")
     testImplementation("ch.qos.logback:logback-classic:1.5.5")
 
+    // Dependências para validação de dados
+    implementation("jakarta.validation:jakarta.validation-api:3.1.0")
+
     // Dependências para Ebean (manipulação de banco de dados)
     implementation("io.ebean:ebean:15.5.2")
     runtimeOnly("io.ebean:ebean-agent:15.5.2")
