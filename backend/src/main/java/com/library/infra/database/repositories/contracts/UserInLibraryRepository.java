@@ -19,7 +19,7 @@ import static com.library.util.utilitarian.UpdateObjectFields.updateField;
 public class UserInLibraryRepository implements BaseRepositories.UserRepository<UserInLibrary> {
     private final Database database;
 
-    private static final EntityFinder<Long, UserInLibrary> finder = new EntityFinder<>(UserInLibrary.class);
+    private static final EntityFinder<UUID, UserInLibrary> finder = new EntityFinder<>(UserInLibrary.class);
 
     /**
      * <h3>Método responsável por buscar o usuário pelo UUID</h3>

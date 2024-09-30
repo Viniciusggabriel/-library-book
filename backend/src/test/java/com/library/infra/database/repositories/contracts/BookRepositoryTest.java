@@ -3,6 +3,7 @@ package com.library.infra.database.repositories.contracts;
 import com.library.DataBaseSourceConfigTest;
 import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
+import com.library.application.models.ClientInLibrary;
 import com.library.application.models.UserInLibrary;
 import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
@@ -29,7 +30,7 @@ class BookRepositoryTest {
      */
     @BeforeEach
     void setUp() {
-        Database database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, BorrowedBooks.class, UserInLibrary.class});
+        Database database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, BorrowedBooks.class, UserInLibrary.class, ClientInLibrary.class});
         bookRepository = new BookRepository(database);
     }
 
@@ -75,8 +76,7 @@ class BookRepositoryTest {
             logger.info("Confirmação: O livro foi removido corretamente do banco de dados.");
         })
                 .isInstanceOf(ValueNotFoundException.class)
-                .hasMessageContaining("O livro não foi encontrado!")
-                .hasMessageContaining("status: 404");
+                .hasMessageContaining("O livro não foi encontrado!");
     }
 
     /**

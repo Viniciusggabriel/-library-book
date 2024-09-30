@@ -3,6 +3,7 @@ package com.library.infra.database.repositories.contracts;
 import com.library.DataBaseSourceConfigTest;
 import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
+import com.library.application.models.ClientInLibrary;
 import com.library.application.models.UserInLibrary;
 import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
@@ -26,7 +27,7 @@ class BorrowedBooksRepositoryTest {
     private BorrowedBooksRepository borrowedBooksRepository;
 
     private Database database;
-    private UserInLibrary userInLibrary;
+    private ClientInLibrary clientInLibrary;
     private Book book;
 
     /**
@@ -77,11 +78,32 @@ class BorrowedBooksRepositoryTest {
         // Caso não exista cria
         database.save(userInLibrary);
         logger.info("Usuário salvo novamente no banco de dados com sucesso!");
+
+        // Configura um cliente
+        UUID CLIENT_UUID = UUID.randomUUID();
+        clientInLibrary = new ClientInLibrary(
+                CLIENT_UUID,
+                "TestadorCliente",
+                "62987654321",
+                "testador@email.com",
+                ZonedDateTime.now(),
+                userInLibrary
+        );
+
+        // Verifica se o cliente já existe dentro do banco de dados de testes
+        Optional<ClientInLibrary> existingClientInLibrary = Optional.ofNullable(database.find(ClientInLibrary.class, CLIENT_UUID));
+        existingClientInLibrary.ifPresent(clientIsPresent -> {
+            logger.debug("O cliente já existia no banco de dados: {}", clientIsPresent.getDsClientName());
+        });
+
+        // Caso não exista cria
+        database.save(clientInLibrary);
+        logger.info("Usuário salvo novamente no banco de dados com sucesso!");
     }
 
     @Test
     public void insertUpdateFindDeleteBorrowedBooks() {
-        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, ZonedDateTime.now().withNano(0), ZonedDateTime.now().withNano(0).plusWeeks(1), userInLibrary, List.of(book));
+        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, ZonedDateTime.now().withNano(0), ZonedDateTime.now().withNano(0).plusWeeks(1), clientInLibrary, List.of(book));
         logger.info("O objeto de empréstimo foi criado!");
 
         borrowedBooksRepository.insertEntity(borrowedBooks);
@@ -99,7 +121,7 @@ class BorrowedBooksRepositoryTest {
             assertThat(bookIsPresent.getDsExpectedDeliveryDate()).isEqualTo(bookForUpdate.getDsExpectedDeliveryDate());
             assertThat(bookIsPresent.getIdBorrowed()).isEqualTo(borrowedBooks.getIdBorrowed());
             assertThat(bookIsPresent.getFkIdBook()).isEqualTo(borrowedBooks.getFkIdBook());
-            assertThat(bookIsPresent.getFkIdUserInLibrary()).isEqualTo(borrowedBooks.getFkIdUserInLibrary());
+            assertThat(bookIsPresent.getFkIdClientInLibrary()).isEqualTo(borrowedBooks.getFkIdClientInLibrary());
         });
         logger.info("O empréstimo foi achado com sucesso pelo seu ID!");
 
@@ -124,7 +146,7 @@ class BorrowedBooksRepositoryTest {
 
         BorrowedBooks borrowedBook;
         for (int value = 1; value <= 10; value++) {
-            borrowedBook = new BorrowedBooks((long) value, ZonedDateTime.now(), ZonedDateTime.now().plusWeeks(1), userInLibrary, List.of(book));
+            borrowedBook = new BorrowedBooks((long) value, ZonedDateTime.now(), ZonedDateTime.now().plusWeeks(1), clientInLibrary, List.of(book));
 
             borrowedBooks.add(borrowedBook);
         }
