@@ -18,15 +18,15 @@ class BorrowedBooksTest {
     private static final Logger logger = LoggerFactory.getLogger(BorrowedBooksTest.class);
 
     private Database database;
+    private ClientInLibrary clientInLibrary;
     private Book book;
-    private UserInLibrary userInLibrary;
 
     /**
      * <h2>Instancia antes do teste a configuração de banco de dados</h2>
      */
     @BeforeEach
     public void setUp() {
-        database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, UserInLibrary.class, BorrowedBooks.class});
+        database = DataBaseSourceConfigTest.databaseTestSetup(new Class[]{Book.class, ClientInLibrary.class, UserInLibrary.class, BorrowedBooks.class});
         setUpTestData();
     }
 
@@ -68,6 +68,27 @@ class BorrowedBooksTest {
         // Caso não exista cria
         database.save(userInLibrary);
         logger.info("Usuário salvo novamente no banco de dados com sucesso!");
+
+        // Configura um cliente
+        UUID CLIENT_UUID = UUID.randomUUID();
+        clientInLibrary = new ClientInLibrary(
+                CLIENT_UUID,
+                "TestadorCliente",
+                "62987654321",
+                "testador@email.com",
+                ZonedDateTime.now().withNano(0),
+                userInLibrary
+        );
+
+        // Verifica se o cliente já existe dentro do banco de dados de testes
+        Optional<ClientInLibrary> existingClientInLibrary = Optional.ofNullable(database.find(ClientInLibrary.class, CLIENT_UUID));
+        existingClientInLibrary.ifPresent(clientIsPresent -> {
+            logger.debug("O cliente já existia no banco de dados: {}", clientIsPresent.getDsClientName());
+        });
+
+        // Caso não exista cria
+        database.save(clientInLibrary);
+        logger.info("Cliente salvo novamente no banco de dados com sucesso!");
     }
 
     /**
@@ -84,7 +105,13 @@ class BorrowedBooksTest {
      */
     @Test
     public void insertFindDeleteBorrowedBooks() {
-        BorrowedBooks borrowedBooks = new BorrowedBooks(1L, ZonedDateTime.now().withNano(0), ZonedDateTime.now().withNano(0).plusWeeks(1), userInLibrary, List.of(book));
+        BorrowedBooks borrowedBooks = new BorrowedBooks(
+                1L,
+                ZonedDateTime.now().withNano(0),
+                ZonedDateTime.now().withNano(0).plusWeeks(1),
+                clientInLibrary,
+                List.of(book)
+        );
 
         database.save(borrowedBooks);
         logger.info("O empréstimo de livro foi persistido com sucesso!");
@@ -95,7 +122,7 @@ class BorrowedBooksTest {
             assertThat(borrowedBooksIsPresent.getDsBorrowedDate()).isEqualTo(borrowedBooks.getDsBorrowedDate());
             assertThat(borrowedBooksIsPresent.getDsExpectedDeliveryDate()).isEqualTo(borrowedBooks.getDsExpectedDeliveryDate());
             assertThat(borrowedBooksIsPresent.getFkIdBook()).isEqualTo(borrowedBooks.getFkIdBook());
-            assertThat(borrowedBooksIsPresent.getFkIdUserInLibrary()).isEqualTo(borrowedBooks.getFkIdUserInLibrary());
+            assertThat(borrowedBooksIsPresent.getFkIdClientInLibrary()).isEqualTo(borrowedBooks.getFkIdClientInLibrary());
         });
         logger.info("O empréstimo foi encontrado com sucesso!");
 

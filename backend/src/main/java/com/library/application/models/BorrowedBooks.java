@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.LocalDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -29,8 +28,8 @@ public class BorrowedBooks {
     private ZonedDateTime dsExpectedDeliveryDate;
 
     @ManyToOne
-    @JoinColumn(name = "FK_USER_IN_LIBRARY")
-    private UserInLibrary fkIdUserInLibrary;
+    @JoinColumn(name = "FK_CLIENT_IN_LIBRARY")
+    private ClientInLibrary fkIdClientInLibrary;
 
     @ManyToMany
     @JoinTable(
