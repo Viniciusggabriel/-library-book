@@ -4,7 +4,7 @@ import com.library.DataBaseSourceConfigTest;
 import com.library.application.models.Book;
 import com.library.application.models.BorrowedBooks;
 import com.library.application.models.UserInLibrary;
-import com.library.util.errors.exceptions.ValueNotFound;
+import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +74,7 @@ class BookRepositoryTest {
             bookRepository.selectEntityById(1L);
             logger.info("Confirmação: O livro foi removido corretamente do banco de dados.");
         })
-                .isInstanceOf(ValueNotFound.class)
+                .isInstanceOf(ValueNotFoundException.class)
                 .hasMessageContaining("O livro não foi encontrado!")
                 .hasMessageContaining("status: 404");
     }

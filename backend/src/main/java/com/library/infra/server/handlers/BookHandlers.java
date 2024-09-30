@@ -1,6 +1,6 @@
 package com.library.infra.server.handlers;
 
-import com.library.application.controllers.ServletGetBookById;
+import com.library.application.controllers.GetBookByIdController;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 
@@ -17,7 +17,7 @@ public class BookHandlers {
 
         // Define a rota da api para buscar um livro pelo ID
         servletContextHandler.setContextPath("/v1/");
-        servletContextHandler.addServlet(new ServletHolder(new ServletGetBookById()), "/list/book/*");
+        servletContextHandler.addServlet(new ServletHolder(new GetBookByIdController()), "/list/book/*");
 
         return servletContextHandler;
     }

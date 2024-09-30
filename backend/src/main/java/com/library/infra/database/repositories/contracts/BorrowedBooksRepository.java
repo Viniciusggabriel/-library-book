@@ -3,8 +3,8 @@ package com.library.infra.database.repositories.contracts;
 import com.library.application.models.BorrowedBooks;
 import com.library.infra.database.repositories.BaseRepositories;
 import com.library.infra.database.repositories.finders.EntityFinder;
-import com.library.util.errors.exceptions.EntityReferenceIllegal;
-import com.library.util.errors.exceptions.ValueNotFound;
+import com.library.util.errors.exceptions.EntityAttributeAccessException;
+import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
@@ -29,7 +29,7 @@ public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<
     public BorrowedBooks selectEntityById(Long id) {
         Optional<BorrowedBooks> expectedBorrowedBooks = Optional.ofNullable(database.find(BorrowedBooks.class, id));
         expectedBorrowedBooks.orElseThrow(() ->
-                new ValueNotFound("Não foi possível encontrar o empréstimo de livro!", HttpStatus.NOT_FOUND_404)
+                new ValueNotFoundException("Não foi possível encontrar o empréstimo de livro!", HttpStatus.NOT_FOUND_404)
         );
 
         return expectedBorrowedBooks.get();
@@ -48,7 +48,7 @@ public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<
             BorrowedBooks borrowedBooksUpdated = updateField(borrowedBooksInDatabase, entity);
             database.update(borrowedBooksUpdated);
         } catch (IllegalAccessException exception) {
-            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial da entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
+            throw new EntityAttributeAccessException(String.format("Erro ao realizar update parcial da entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
 

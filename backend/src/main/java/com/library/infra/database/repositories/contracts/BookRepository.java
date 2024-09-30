@@ -3,9 +3,9 @@ package com.library.infra.database.repositories.contracts;
 import com.library.application.models.Book;
 import com.library.infra.database.repositories.BaseRepositories;
 import com.library.infra.database.repositories.finders.EntityFinder;
-import com.library.util.errors.exceptions.EntityReferenceIllegal;
-import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
-import com.library.util.errors.exceptions.ValueNotFound;
+import com.library.util.errors.exceptions.EntityAttributeAccessException;
+import com.library.util.errors.exceptions.ValueAlreadyExistsException;
+import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
@@ -43,7 +43,7 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
     @Override
     public Book selectEntityById(Long id) {
         Optional<Book> expectedBook = Optional.ofNullable(database.find(Book.class, id));
-        expectedBook.orElseThrow(() -> new ValueNotFound("O livro não foi encontrado!", HttpStatus.NOT_FOUND_404));
+        expectedBook.orElseThrow(() -> new ValueNotFoundException("O livro não foi encontrado!", HttpStatus.NOT_FOUND_404));
 
         return expectedBook.get();
     }
@@ -62,7 +62,7 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
 
         Optional<Book> expectedBook = Optional.ofNullable(finder.byName("dsBookName", entity.getDsBookName()));
         expectedBook.ifPresent(bookIsPresent -> {
-            throw new ValueIsPresentInDatabase(String.format("O livro inserido já está presente dentro do banco de dados: %s", bookIsPresent.getDsBookName()), HttpStatus.BAD_REQUEST_400);
+            throw new ValueAlreadyExistsException(String.format("O livro inserido já está presente dentro do banco de dados: %s", bookIsPresent.getDsBookName()), HttpStatus.BAD_REQUEST_400);
         });
 
         database.save(entity);
@@ -84,7 +84,7 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
             Book bookUpdated = updateField(bookInDatabase, entity);
             database.update(bookUpdated);
         } catch (IllegalAccessException exception) {
-            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
+            throw new EntityAttributeAccessException(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
 

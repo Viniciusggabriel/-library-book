@@ -17,6 +17,7 @@ public class BookCrudService {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
     }
 
+    // TODO: Realizar tratamentos de erros no momento de formar o json
     public char[] getBookById(Long idBook) throws JsonProcessingException {
         Book bookInDatabase = bookRepository.selectEntityById(idBook);
 

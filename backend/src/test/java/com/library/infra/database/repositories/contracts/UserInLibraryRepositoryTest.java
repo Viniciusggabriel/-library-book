@@ -2,7 +2,7 @@ package com.library.infra.database.repositories.contracts;
 
 import com.library.DataBaseSourceConfigTest;
 import com.library.application.models.UserInLibrary;
-import com.library.util.errors.exceptions.ValueNotFound;
+import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ class UserInLibraryRepositoryTest {
             userInLibraryRepository.selectUserByID(USER_UUID);
             logger.info("Confirmação: O usuário foi removido corretamente do banco de dados.");
         })
-                .isInstanceOf(ValueNotFound.class)
+                .isInstanceOf(ValueNotFoundException.class)
                 .hasMessageContaining("O usuário não foi encontrado!")
                 .hasMessageContaining("status: 404");
     }

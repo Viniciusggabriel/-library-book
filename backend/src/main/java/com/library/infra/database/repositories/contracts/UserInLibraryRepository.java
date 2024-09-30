@@ -3,9 +3,9 @@ package com.library.infra.database.repositories.contracts;
 import com.library.application.models.UserInLibrary;
 import com.library.infra.database.repositories.BaseRepositories;
 import com.library.infra.database.repositories.finders.EntityFinder;
-import com.library.util.errors.exceptions.EntityReferenceIllegal;
-import com.library.util.errors.exceptions.ValueIsPresentInDatabase;
-import com.library.util.errors.exceptions.ValueNotFound;
+import com.library.util.errors.exceptions.EntityAttributeAccessException;
+import com.library.util.errors.exceptions.ValueAlreadyExistsException;
+import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
@@ -31,7 +31,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
     @Override
     public UserInLibrary selectUserByID(UUID id) {
         Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(database.find(UserInLibrary.class, id));
-        expectedUserInLibrary.orElseThrow(() -> new ValueNotFound("O usuário não foi encontrado!", HttpStatus.NOT_FOUND_404));
+        expectedUserInLibrary.orElseThrow(() -> new ValueNotFoundException("O usuário não foi encontrado!", HttpStatus.NOT_FOUND_404));
 
         return expectedUserInLibrary.get();
     }
@@ -51,7 +51,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
 
         Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byName("dsUserName", user.getDsUserName()));
         expectedUserInLibrary.ifPresent(userIsPresent -> {
-            throw new ValueIsPresentInDatabase(String.format("O usuário já existe dentro do banco de dados: %s", userIsPresent.getDsUserName()), HttpStatus.NOT_FOUND_404);
+            throw new ValueAlreadyExistsException(String.format("O usuário já existe dentro do banco de dados: %s", userIsPresent.getDsUserName()), HttpStatus.NOT_FOUND_404);
         });
 
         database.save(user);
@@ -73,7 +73,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
             UserInLibrary userUpdated = updateField(userInDatabase, user);
             database.update(userUpdated);
         } catch (IllegalAccessException exception) {
-            throw new EntityReferenceIllegal(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
+            throw new EntityAttributeAccessException(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
     }
 
