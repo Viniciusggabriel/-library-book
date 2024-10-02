@@ -2,11 +2,13 @@ package com.library.util.errors.throwables;
 
 import lombok.Getter;
 
+import java.io.IOException;
+
 @Getter
-public class ApplicationRuntimeException extends RuntimeException {
+public class ApplicationIOException extends IOException {
     private final int statusCode;
 
-    public ApplicationRuntimeException(String message, Integer httpStatus) {
+    public ApplicationIOException(String message, Integer httpStatus) {
         super(message);
         this.statusCode = httpStatus;
     }
