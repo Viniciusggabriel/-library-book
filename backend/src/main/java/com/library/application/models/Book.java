@@ -18,7 +18,7 @@ import java.util.Objects;
 public class Book {
     @Id
     @Column(name = "ID_BOOK")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long idBook;
 
     @Column(name = "DS_BOOK_NAME", nullable = false, length = 150)
