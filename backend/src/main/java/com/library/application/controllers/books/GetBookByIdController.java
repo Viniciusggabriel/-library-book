@@ -1,4 +1,4 @@
-package com.library.application.controllers;
+package com.library.application.controllers.books;
 
 import com.library.application.services.BookCrudService;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;

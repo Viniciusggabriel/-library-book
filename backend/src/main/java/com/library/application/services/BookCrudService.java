@@ -3,6 +3,7 @@ package com.library.application.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.library.application.dto.requests.BookRequest;
 import com.library.application.dto.responses.BookResponse;
 import com.library.application.models.Book;
 import com.library.infra.database.configs.DataBaseSourceConfig;
@@ -14,12 +15,13 @@ import org.eclipse.jetty.http.HttpStatus;
 @RequiredArgsConstructor
 public class BookCrudService {
     private final BookRepository bookRepository;
+    private Book book;
 
     public BookCrudService() {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
     }
 
-    public char[] getBookById(Long idBook) throws JsonProcessingException {
+    public char[] getBookById(Long idBook) throws MalformedJsonException {
         Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -42,5 +44,17 @@ public class BookCrudService {
         }
 
         return json.toCharArray();
+    }
+
+    public void postBook(BookRequest bookRequest) {
+        book = new Book();
+
+        book.setDsBookName(bookRequest.dsBookName());
+        book.setDsAuthorName(bookRequest.dsAuthorName());
+        book.setDsReleaseDate(bookRequest.dsReleaseDate());
+        book.setDsSummary(bookRequest.dsSummary());
+        book.setDsQuantityBooks(bookRequest.dsQuantityBooks());
+
+        bookRepository.insertEntity(book);
     }
 }
