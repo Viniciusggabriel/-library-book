@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
 import com.library.util.errors.exceptions.InvalidJsonPropertyException;
+import com.library.util.utilitarian.CreateJsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,18 +37,10 @@ public class PostBookController extends HttpServlet {
             stringBuilder.append(lineJson);
         }
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
+        BookRequest bookRequest = CreateJsonObject.generateJson(stringBuilder, BookRequest.class);
+        bookCrudService.postBook(bookRequest);
 
-            BookRequest bookRequest = objectMapper.readValue(stringBuilder.toString(), BookRequest.class);
-
-            resp.setStatus(HttpServletResponse.SC_CREATED);
-            resp.getWriter().write("Sucesso ao criar o livro!");
-            bookCrudService.postBook(bookRequest);
-        } catch (UnrecognizedPropertyException exception) {
-            throw new InvalidJsonPropertyException(String.format("Json malformado verifique as chaves e valores do seu Json: %s",
-                    exception.getPropertyName()), HttpStatus.BAD_REQUEST_400, exception.getCause());
-        }
+        resp.setStatus(HttpServletResponse.SC_CREATED);
+        resp.getWriter().write("Sucesso ao criar o livro!");
     }
 }
