@@ -1,15 +1,8 @@
 package com.library.util.errors.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.library.util.errors.throwables.ApplicationIOException;
 
-import java.io.IOException;
-
-@Getter
-@AllArgsConstructor
-public class InputOutputDataException extends IOException {
-    private final Integer httpStatus;
-
+public class InputOutputDataException extends ApplicationIOException {
     /**
      * <h3>Exception que serve para personalizar erros de IO</h3>
      *
@@ -17,7 +10,6 @@ public class InputOutputDataException extends IOException {
      * @param httpStatus -> <strong>Código de erro</strong>
      */
     public InputOutputDataException(String message, Integer httpStatus) {
-        super(String.format("message: %s, status: %d", message, httpStatus));
-        this.httpStatus = httpStatus;
+        super(message, httpStatus);
     }
 }
