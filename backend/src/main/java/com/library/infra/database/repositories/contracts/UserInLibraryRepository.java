@@ -49,7 +49,7 @@ public class UserInLibraryRepository implements BaseRepositories.UserRepository<
             throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio!");
         }
 
-        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byName("dsUserName", user.getDsUserName()));
+        Optional<UserInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.findByName("dsUserName", user.getDsUserName()));
         expectedUserInLibrary.ifPresent(userIsPresent -> {
             throw new ValueAlreadyExistsException(String.format("O usuário já existe dentro do banco de dados: %s", userIsPresent.getDsUserName()), HttpStatus.NOT_FOUND_404);
         });

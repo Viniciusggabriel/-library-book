@@ -60,7 +60,7 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
             throw new IllegalArgumentException("O nome do livro não pode ser nulo ou vazio!");
         }
 
-        Optional<Book> expectedBook = Optional.ofNullable(finder.byName("dsBookName", entity.getDsBookName()));
+        Optional<Book> expectedBook = Optional.ofNullable(finder.findByName("dsBookName", entity.getDsBookName()));
         expectedBook.ifPresent(bookIsPresent -> {
             throw new ValueAlreadyExistsException(String.format("O livro inserido já está presente dentro do banco de dados: %s", bookIsPresent.getDsBookName()), HttpStatus.BAD_REQUEST_400);
         });
@@ -79,12 +79,17 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
     @Override
     public void updateEntity(Book entity, Long id) {
         Book bookInDatabase = selectEntityById(id);
+        if (bookInDatabase == null) {
+            throw new ValueNotFoundException(String.format("Livro com ID %d não encontrado.", id), HttpStatus.BAD_REQUEST_400);
+        }
 
         try {
-            Book bookUpdated = updateField(bookInDatabase, entity);
-            database.update(bookUpdated);
+            finder.updateEntity(entity, bookInDatabase, "idBook", id);
         } catch (IllegalAccessException exception) {
-            throw new EntityAttributeAccessException(String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
+            throw new EntityAttributeAccessException(
+                    String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR_500
+            );
         }
     }
 

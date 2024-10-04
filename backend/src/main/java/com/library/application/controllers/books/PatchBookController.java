@@ -25,7 +25,7 @@ public class PatchBookController extends HttpServlet {
     }
 
     @Override
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String extractIdBook;
         Long idBook;
 

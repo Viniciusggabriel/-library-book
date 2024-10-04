@@ -62,7 +62,7 @@ public class ClientInLibraryRepository implements BaseRepositories.CrudRepositor
             throw new IllegalArgumentException("O nome do cliente não pode ser nulo ou vazio!");
         }
 
-        Optional<ClientInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.byName("dsClientName", entity.getDsClientName()));
+        Optional<ClientInLibrary> expectedUserInLibrary = Optional.ofNullable(finder.findByName("dsClientName", entity.getDsClientName()));
         expectedUserInLibrary.ifPresent(clientIsPresent -> {
             throw new ValueAlreadyExistsException(String.format("O cliente já existe dentro do banco de dados: %s", clientIsPresent.getDsClientName()), HttpStatus.NOT_FOUND_404);
         });
