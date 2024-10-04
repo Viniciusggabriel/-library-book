@@ -1,18 +1,13 @@
 package com.library.application.controllers.books;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
-import com.library.util.errors.exceptions.InvalidJsonPropertyException;
-import com.library.util.utilitarian.CreateJsonObject;
+import com.library.util.utilitarian.ManipulateJsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.jetty.http.HttpStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +32,7 @@ public class PostBookController extends HttpServlet {
             stringBuilder.append(lineJson);
         }
 
-        BookRequest bookRequest = CreateJsonObject.generateJson(stringBuilder, BookRequest.class);
+        BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
         bookCrudService.postBook(bookRequest);
 
         resp.setStatus(HttpServletResponse.SC_CREATED);
