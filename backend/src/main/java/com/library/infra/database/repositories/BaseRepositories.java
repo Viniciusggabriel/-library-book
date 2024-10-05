@@ -7,25 +7,38 @@ import java.util.UUID;
  * <h1>Interface principal para métodos dos repositórios</h1>
  */
 public interface BaseRepositories {
+
     interface CrudRepository<T, ID> {
-        List<T> selectEntities(Integer sizeRows);
+        default List<T> selectEntities(Integer sizeRows) {
+            return List.of();
+        }
 
-        T selectEntityById(ID id);
+        default T selectEntityById(ID id) {
+            return null;
+        }
 
-        void insertEntity(T entity);
+        default void insertEntity(T entity) {
+        }
 
-        void updateEntity(T entity, ID id) throws IllegalAccessException;
+        default void updateEntity(T entity, ID id) throws IllegalAccessException {
+        }
 
-        void deleteEntity(ID id);
+        default void deleteEntity(ID id) {
+        }
     }
 
     interface UserRepository<T> {
-        T selectUserByID(UUID id);
+        default T selectUserByID(UUID id) {
+            return null;
+        }
 
-        void insertUser(T user);
+        default void insertUser(T user) {
+        }
 
-        void updateUser(T user, UUID id) throws IllegalAccessException;
+        default void updateUser(T user, UUID id) throws IllegalAccessException {
+        }
 
-        void deleteUser(UUID id);
+        default void deleteUser(UUID id) {
+        }
     }
 }

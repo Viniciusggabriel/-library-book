@@ -8,6 +8,12 @@ import lombok.Getter;
 public class MalformedJsonException extends JsonProcessingException {
     private final int statusCode;
 
+
+    public MalformedJsonException(String message, Integer httpStatus) {
+        super(message);
+        this.statusCode = httpStatus;
+    }
+
     public MalformedJsonException(String message, JsonLocation loc, Integer httpStatus) {
         super(message);
         this.statusCode = httpStatus;

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.ZonedDateTime;
 
 public record BookRequest(
+        @JsonProperty("_id_book")
+        Long idBook,
+
         @JsonProperty("ds_book_name")
         String dsBookName,
 

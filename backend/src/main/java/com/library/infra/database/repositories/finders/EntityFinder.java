@@ -3,10 +3,6 @@ package com.library.infra.database.repositories.finders;
 import io.ebean.Finder;
 import io.ebean.PagedList;
 
-import java.util.Arrays;
-
-import static com.library.util.utilitarian.UpdateObjectFields.updateField;
-
 public class EntityFinder<ID, T> extends Finder<ID, T> {
     public EntityFinder(Class<T> type) {
         super(type);
@@ -33,10 +29,5 @@ public class EntityFinder<ID, T> extends Finder<ID, T> {
      */
     public T findByName(String attribute, String name) {
         return query().where().eq(attribute, name).findOne();
-    }
-
-    public void updateEntity(Object entity, Object entityInDatabase, String idAttribute, ID id) throws IllegalAccessException {
-        Object target = updateField(entity, entityInDatabase);
-        query().asUpdate().set(Arrays.toString(target.getClass().getFields()), entity).where().eq(idAttribute, id).update();
     }
 }

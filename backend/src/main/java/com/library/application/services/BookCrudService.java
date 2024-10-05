@@ -7,12 +7,13 @@ import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.database.repositories.contracts.BookRepository;
 import com.library.util.errors.exceptions.MalformedJsonException;
 import com.library.util.utilitarian.ManipulateJsonObject;
+import com.library.util.utilitarian.UpdateObjectFields;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BookCrudService {
     private final BookRepository bookRepository;
-    private Book book;
+    private Book bookRequest;
 
     public BookCrudService() {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
@@ -33,15 +34,15 @@ public class BookCrudService {
     }
 
     public void postBook(BookRequest bookRequest) {
-        book = new Book();
+        this.bookRequest = new Book();
 
-        book.setDsBookName(bookRequest.dsBookName());
-        book.setDsAuthorName(bookRequest.dsAuthorName());
-        book.setDsReleaseDate(bookRequest.dsReleaseDate());
-        book.setDsSummary(bookRequest.dsSummary());
-        book.setDsQuantityBooks(bookRequest.dsQuantityBooks());
+        this.bookRequest.setDsBookName(bookRequest.dsBookName());
+        this.bookRequest.setDsAuthorName(bookRequest.dsAuthorName());
+        this.bookRequest.setDsReleaseDate(bookRequest.dsReleaseDate());
+        this.bookRequest.setDsSummary(bookRequest.dsSummary());
+        this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
-        bookRepository.insertEntity(book);
+        bookRepository.insertEntity(this.bookRequest);
     }
 
     /**
@@ -53,17 +54,19 @@ public class BookCrudService {
      * @return char[] -> <strong>Json montado pelo método que busca livros</strong>
      * @throws MalformedJsonException -> <strong>Exception personalizada para json mal formado </strong>
      */
-    public char[] patchBook(BookRequest bookRequest, Long idBook) throws MalformedJsonException {
-        book = new Book();
+    public char[] putBook(BookRequest bookRequest, Long idBook) throws MalformedJsonException, IllegalAccessException {
+        Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
-        book.setDsBookName(bookRequest.dsBookName());
-        book.setDsAuthorName(bookRequest.dsAuthorName());
-        book.setDsReleaseDate(bookRequest.dsReleaseDate());
-        book.setDsSummary(bookRequest.dsSummary());
-        book.setDsQuantityBooks(bookRequest.dsQuantityBooks());
+        this.bookRequest = new Book();
+        this.bookRequest.setDsBookName(bookRequest.dsBookName());
+        this.bookRequest.setDsAuthorName(bookRequest.dsAuthorName());
+        this.bookRequest.setDsReleaseDate(bookRequest.dsReleaseDate());
+        this.bookRequest.setDsSummary(bookRequest.dsSummary());
+        this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
-        bookRepository.updateEntity(book, idBook);
+        UpdateObjectFields.updatedObject(bookInDatabase, this.bookRequest);
 
-        return this.getBookById(idBook);
+        bookRepository.updateEntity(bookInDatabase, idBook);
+        return getBookById(idBook);
     }
 }

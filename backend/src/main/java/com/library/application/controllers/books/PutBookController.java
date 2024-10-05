@@ -2,7 +2,9 @@ package com.library.application.controllers.books;
 
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
+import com.library.util.errors.exceptions.InputOutputDataException;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
+import com.library.util.errors.exceptions.MalformedJsonException;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.validations.validators.ValidateUrlParameter;
 import jakarta.servlet.ServletException;
@@ -17,10 +19,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class PatchBookController extends HttpServlet {
+public class PutBookController extends HttpServlet {
     private final BookCrudService bookCrudService;
 
-    public PatchBookController() {
+    public PutBookController() {
         this.bookCrudService = new BookCrudService();
     }
 
@@ -29,35 +31,41 @@ public class PatchBookController extends HttpServlet {
         String extractIdBook;
         Long idBook;
 
-        // Estrai o ID do livro na url e valida
+        // Extrai o ID do livro na URL e valida
         try {
             extractIdBook = extractIdBook(req);
             idBook = ValidateUrlParameter.validateLongId(extractIdBook);
         } catch (InvalidRequestPathParameterException exception) {
-            throw new InvalidRequestPathParameterException(exception.getMessage(), exception.getHttpStatus(), exception.getCause());
+            resp.sendError(exception.getHttpStatus(), exception.getMessage());
+            return;
         }
 
         // Lê o payload da requisição
-        BufferedReader reader = req.getReader();
         StringBuilder stringBuilder = new StringBuilder();
-        String lineJson;
-        while ((lineJson = reader.readLine()) != null) {
-            stringBuilder.append(lineJson);
+        try (BufferedReader reader = req.getReader()) {
+            String lineJson;
+            while ((lineJson = reader.readLine()) != null) {
+                stringBuilder.append(lineJson);
+            }
+        } catch (IOException exception) {
+            throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
 
         BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
-        bookCrudService.postBook(bookRequest);
 
-        char[] jsonBook;
+        String jsonBook;
         try {
-            // Chama o service para realizar o patch
-            jsonBook = bookCrudService.patchBook(bookRequest, idBook);
-
-            if (jsonBook == null) throw new ServletException("Erro ao montar json com o livro!");
+            char[] bookChars = bookCrudService.putBook(bookRequest, idBook);
+            if (bookChars == null) {
+                throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
+            }
+            jsonBook = new String(bookChars);  // Converte char[] para String
         } catch (Exception exception) {
-            throw new InvalidRequestPathParameterException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502, exception.getCause());
+            resp.sendError(HttpStatus.BAD_GATEWAY_502, "Erro ao processar a requisição.");
+            return;
         }
 
+        // Envia a resposta
         resp.setContentType("application/json;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(jsonBook);

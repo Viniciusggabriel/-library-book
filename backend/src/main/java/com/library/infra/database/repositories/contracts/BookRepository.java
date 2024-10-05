@@ -3,7 +3,6 @@ package com.library.infra.database.repositories.contracts;
 import com.library.application.models.Book;
 import com.library.infra.database.repositories.BaseRepositories;
 import com.library.infra.database.repositories.finders.EntityFinder;
-import com.library.util.errors.exceptions.EntityAttributeAccessException;
 import com.library.util.errors.exceptions.ValueAlreadyExistsException;
 import com.library.util.errors.exceptions.ValueNotFoundException;
 import io.ebean.Database;
@@ -12,8 +11,6 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.library.util.utilitarian.UpdateObjectFields.updateField;
 
 @RequiredArgsConstructor
 public class BookRepository implements BaseRepositories.CrudRepository<Book, Long> {
@@ -74,23 +71,11 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
      * <p>Chama um método static para realizar a verificação dos valores nulos da entidade usando o Fild</p>
      *
      * @param entity -> <strong>Nova entidade a ser alterada</strong>
-     * @param id     -> <strong>Id do livro a ser alterado</strong>
+     * @param id     -> <strong>ID do livro a ser alterado</strong>
      */
     @Override
     public void updateEntity(Book entity, Long id) {
-        Book bookInDatabase = selectEntityById(id);
-        if (bookInDatabase == null) {
-            throw new ValueNotFoundException(String.format("Livro com ID %d não encontrado.", id), HttpStatus.BAD_REQUEST_400);
-        }
-
-        try {
-            finder.updateEntity(entity, bookInDatabase, "idBook", id);
-        } catch (IllegalAccessException exception) {
-            throw new EntityAttributeAccessException(
-                    String.format("Erro ao realizar update parcial na entidade: %s", exception.getMessage()),
-                    HttpStatus.INTERNAL_SERVER_ERROR_500
-            );
-        }
+        database.update(entity);
     }
 
     /**

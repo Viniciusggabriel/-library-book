@@ -5,14 +5,15 @@ import com.library.infra.database.repositories.BaseRepositories;
 import com.library.infra.database.repositories.finders.EntityFinder;
 import com.library.util.errors.exceptions.EntityAttributeAccessException;
 import com.library.util.errors.exceptions.ValueNotFoundException;
+import com.library.util.utilitarian.UpdateObjectFields;
 import io.ebean.Database;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-import static com.library.util.utilitarian.UpdateObjectFields.updateField;
 
 @RequiredArgsConstructor
 public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<BorrowedBooks, Long> {
@@ -45,8 +46,8 @@ public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<
         BorrowedBooks borrowedBooksInDatabase = selectEntityById(id);
 
         try {
-            BorrowedBooks borrowedBooksUpdated = updateField(borrowedBooksInDatabase, entity);
-            database.update(borrowedBooksUpdated);
+            UpdateObjectFields.updatedObject(entity, borrowedBooksInDatabase);
+            database.update(borrowedBooksInDatabase);
         } catch (IllegalAccessException exception) {
             throw new EntityAttributeAccessException(String.format("Erro ao realizar update parcial da entidade: %s", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR_500);
         }
