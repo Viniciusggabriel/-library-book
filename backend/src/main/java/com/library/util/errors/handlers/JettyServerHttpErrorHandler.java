@@ -17,11 +17,12 @@ import java.io.PrintWriter;
 
 import static com.fasterxml.jackson.databind.util.ClassUtil.getRootCause;
 
-public class ServerHttpErrorHandler extends ErrorHandler {
-    private static final Logger logger = LoggerFactory.getLogger(ServerHttpErrorHandler.class);
+public class JettyServerHttpErrorHandler extends ErrorHandler {
+    private static final Logger logger = LoggerFactory.getLogger(JettyServerHttpErrorHandler.class);
 
     /**
      * <h3>Método responsável por retornar erros que serão lançados para o usuário caso os controllers não consigam validar a requisição.</h3>
+     * <p>Esse handler de erros serve para interceptar erros somente lançados pelo jetty que estão no escopo do jakarta servlet</p>
      *
      * @param baseRequest -> <strong>Serve para pegar os dados base da requisição</strong>
      * @param request     -> <strong>Pega os valores que foram requisitado</strong>

@@ -1,6 +1,7 @@
 package com.library.application.controllers.books;
 
 import com.library.application.services.BookCrudService;
+import com.library.util.errors.exceptions.ErrorMakingRequestException;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
 import com.library.util.validations.validators.ValidateUrlParameter;
 import jakarta.servlet.ServletException;
@@ -48,7 +49,7 @@ public class GetBookByIdController extends HttpServlet {
             if (jsonBook == null)
                 throw new ServletException("Erro ao montar json com o livro!");
         } catch (Exception exception) {
-            throw new InvalidRequestPathParameterException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502, exception.getCause());
+            throw new ErrorMakingRequestException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502);
         }
 
         resp.setContentType("application/json;charset=utf-8");

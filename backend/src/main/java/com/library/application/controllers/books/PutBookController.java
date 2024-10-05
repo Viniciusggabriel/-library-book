@@ -2,9 +2,11 @@ package com.library.application.controllers.books;
 
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
+import com.library.util.errors.exceptions.ErrorMakingRequestException;
 import com.library.util.errors.exceptions.InputOutputDataException;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
 import com.library.util.errors.exceptions.MalformedJsonException;
+import com.library.util.errors.handlers.JacksonErrorHandler;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.validations.validators.ValidateUrlParameter;
 import jakarta.servlet.ServletException;
@@ -41,15 +43,53 @@ public class PutBookController extends HttpServlet {
         String extractIdBook;
         Long idBook;
 
-        // Extrai o ID do livro na URL e valida
+        // Captura exceções e envia resposta em JSON
         try {
+            // Extrai o ID do livro da URL e valida
             extractIdBook = extractIdBook(req);
             idBook = ValidateUrlParameter.validateLongId(extractIdBook);
-        } catch (InvalidRequestPathParameterException exception) {
-            throw new InvalidRequestPathParameterException(exception.getMessage(), exception.getHttpStatus(), exception.getCause());
-        }
 
-        // Lê o payload da requisição
+            // Lê o payload da requisição
+            StringBuilder stringBuilder = getStringBuilder(req);
+
+            // Converte o JSON para um objeto BookRequest
+            BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
+
+            String jsonBook;
+            try {
+                // Atualiza o livro
+                bookCrudService.putBook(bookRequest, idBook);
+
+                // Recupera o livro atualizado
+                char[] bookChars = bookCrudService.getBookById(idBook);
+                if (bookChars == null) {
+                    throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
+                }
+                jsonBook = new String(bookChars);  // Converte char[] para String
+
+            } catch (Exception exception) {
+                throw new ErrorMakingRequestException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502);
+            }
+
+            // Envia a resposta com o livro atualizado
+            resp.setContentType("application/json;charset=utf-8");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonBook);
+
+        } catch (RuntimeException exception) {
+            JacksonErrorHandler.handleException(exception, resp);
+        }
+    }
+
+    /**
+     * <h3>Método privado para gerar a string com o payload da requisição</h3>
+     * <p>Recebe a requisição http e monta um StringBuilder para poder realizar um buffer com os dados obtidos </p>
+     *
+     * @param req -> <strong>Requisição http</strong>
+     * @return StringBuilder -> <strong>String buffer com os dados recebidos da requisição</strong>
+     * @throws InputOutputDataException -> <strong>Exception para erros ao processar dados do json</strong>
+     */
+    private static StringBuilder getStringBuilder(HttpServletRequest req) throws InputOutputDataException {
         StringBuilder stringBuilder = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
             String lineJson;
@@ -60,27 +100,7 @@ public class PutBookController extends HttpServlet {
             throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
 
-        BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
-
-        String jsonBook;
-        try {
-            char[] bookChars = bookCrudService.putBook(bookRequest, idBook);
-            if (bookChars == null) {
-                throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
-            }
-            jsonBook = new String(bookChars);  // Converte char[] para String
-
-        } catch (Exception exception) {
-            resp.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
-            resp.setContentType("application/json;charset=utf-8");
-            resp.getWriter().write("{\"message\": \"" + exception.getMessage() + "\"}");
-            return;
-        }
-
-        // Envia a resposta
-        resp.setContentType("application/json;charset=utf-8");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(jsonBook);
+        return stringBuilder;
     }
 
     /**

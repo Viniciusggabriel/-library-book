@@ -5,6 +5,7 @@ import com.library.application.dto.responses.BookResponse;
 import com.library.application.models.Book;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.database.repositories.contracts.BookRepository;
+import com.library.util.errors.exceptions.EntityAttributeAccessException;
 import com.library.util.errors.exceptions.MalformedJsonException;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.utilitarian.UpdateObjectFields;
@@ -64,10 +65,9 @@ public class BookCrudService {
      *
      * @param bookRequest -> <strong>DTO obtido pelo controller para busca de dados</strong>
      * @param idBook      -> <strong>Id do livro a ser buscado</strong>
-     * @return char[] -> <strong>Json montado pelo método que busca livros</strong>
-     * @throws MalformedJsonException -> <strong>Exception personalizada para json mal formado </strong>
+     * @throws IllegalAccessException -> <strong>Exception personalizada para json mal formado </strong>
      */
-    public char[] putBook(BookRequest bookRequest, Long idBook) throws MalformedJsonException, IllegalAccessException {
+    public void putBook(BookRequest bookRequest, Long idBook) throws IllegalAccessException {
         Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
         this.bookRequest = new Book();
@@ -77,9 +77,12 @@ public class BookCrudService {
         this.bookRequest.setDsSummary(bookRequest.dsSummary());
         this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
-        UpdateObjectFields.updatedObject(bookInDatabase, this.bookRequest);
+        try {
+            UpdateObjectFields.updatedObject(bookInDatabase, this.bookRequest);
+            bookRepository.updateEntity(bookInDatabase, idBook);
+        } catch (EntityAttributeAccessException exception) {
+            throw new EntityAttributeAccessException(exception.getMessage(), exception.getStatusCode());
+        }
 
-        bookRepository.updateEntity(bookInDatabase, idBook);
-        return getBookById(idBook);
     }
 }

@@ -27,16 +27,15 @@ public class ManipulateJsonObject {
             objectMapper.registerModule(new JavaTimeModule());
 
             return objectMapper.readValue(stringBuilder.toString(), tClass);
-        } catch (UnrecognizedPropertyException | JsonParseException exception) {
-            String message = "";
-            if (exception instanceof UnrecognizedPropertyException)
-                message = ((UnrecognizedPropertyException) exception).getPropertyName();
-
-            if (exception instanceof JsonParseException)
-                message = ((JsonParseException) exception).getRequestPayloadAsString();
-
+        } catch (UnrecognizedPropertyException exception) {
             throw new InvalidJsonPropertyException(
-                    String.format("Json malformado verifique as chaves e valores do seu Json: %s", message),
+                    String.format("Json malformado verifique as chaves e valores do seu Json: %s", exception.getLocation()),
+                    HttpStatus.BAD_REQUEST_400,
+                    exception.getCause());
+
+        } catch (JsonParseException exception) {
+            throw new InvalidJsonPropertyException(
+                    String.format("Erro ao realizar o parse do json: %s", exception.getMessage()),
                     HttpStatus.BAD_REQUEST_400,
                     exception.getCause());
         }

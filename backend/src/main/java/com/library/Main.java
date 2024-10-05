@@ -7,7 +7,7 @@ import com.library.application.models.UserInLibrary;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
 import com.library.infra.server.handlers.BookHandlers;
-import com.library.util.errors.handlers.ServerHttpErrorHandler;
+import com.library.util.errors.handlers.JettyServerHttpErrorHandler;
 import org.eclipse.jetty.ee10.servlet.ErrorHandler;
 import org.eclipse.jetty.server.Handler;
 
@@ -39,7 +39,7 @@ public class Main {
                         BookHandlers.setupBookHandler()
                 },
                 new ErrorHandler[]{
-                        new ServerHttpErrorHandler()
+                        new JettyServerHttpErrorHandler()
                 }
         );
     }

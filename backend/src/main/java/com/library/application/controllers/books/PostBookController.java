@@ -2,12 +2,14 @@ package com.library.application.controllers.books;
 
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
+import com.library.util.errors.exceptions.InputOutputDataException;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.jetty.http.HttpStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,11 +36,14 @@ public class PostBookController extends HttpServlet {
         resp.setContentType("application/json;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
 
-        BufferedReader reader = req.getReader();
         StringBuilder stringBuilder = new StringBuilder();
-        String lineJson;
-        while ((lineJson = reader.readLine()) != null) {
-            stringBuilder.append(lineJson);
+        try (BufferedReader reader = req.getReader()) {
+            String lineJson;
+            while ((lineJson = reader.readLine()) != null) {
+                stringBuilder.append(lineJson);
+            }
+        } catch (IOException exception) {
+            throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
 
         BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
