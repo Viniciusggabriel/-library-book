@@ -26,6 +26,16 @@ public class PutBookController extends HttpServlet {
         this.bookCrudService = new BookCrudService();
     }
 
+    /**
+     * <h3>Método reescrito para uma falsa requisição PUT, a requisição no caso atende parecido a um patch, não é usado o patch devido a erros 501 do jetty</h3>
+     * <p>É extraído o ID do livro a ser alterado e após isso válida o ID</p>
+     * <p>Após pegar o id do livro é feito a leitura do payload da requisição</p>
+     *
+     * @param req  -> <strong>Requisição do usuário</strong>
+     * @param resp -> <strong>Resposta a ser retornada</strong>
+     * @throws ServletException -> <strong>Tratamento de erros http</strong>
+     * @throws IOException      -> <strong>Tratamento de erros de entrada e saida de dados</strong>
+     */
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String extractIdBook;
@@ -36,8 +46,7 @@ public class PutBookController extends HttpServlet {
             extractIdBook = extractIdBook(req);
             idBook = ValidateUrlParameter.validateLongId(extractIdBook);
         } catch (InvalidRequestPathParameterException exception) {
-            resp.sendError(exception.getHttpStatus(), exception.getMessage());
-            return;
+            throw new InvalidRequestPathParameterException(exception.getMessage(), exception.getHttpStatus(), exception.getCause());
         }
 
         // Lê o payload da requisição
@@ -60,8 +69,11 @@ public class PutBookController extends HttpServlet {
                 throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
             }
             jsonBook = new String(bookChars);  // Converte char[] para String
+
         } catch (Exception exception) {
-            resp.sendError(HttpStatus.BAD_GATEWAY_502, "Erro ao processar a requisição.");
+            resp.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+            resp.setContentType("application/json;charset=utf-8");
+            resp.getWriter().write("{\"message\": \"" + exception.getMessage() + "\"}");
             return;
         }
 

@@ -7,7 +7,7 @@ public class PasswordEncryption {
      * <h3>Método para criptografar a senha usando Bcrypt</h3>
      *
      * @param password -> <strong>Senha a ser criptografada</strong>
-     * @return
+     * @return String -> <strong>Senha criptografada</strong>
      */
     public static String setupBcrypt(String password) {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray());
@@ -18,7 +18,7 @@ public class PasswordEncryption {
      *
      * @param password     -> <strong>Senha inserida para verificação</strong>
      * @param hashPassword -> <strong>Senha criptografada do usuário</strong>
-     * @return
+     * @return BCrypt.Result -> <strong>Resultado após o decrypt da senha</strong>
      */
     public static BCrypt.Result verifyBcrypt(String password, String hashPassword) {
         return BCrypt.verifyer().verify(password.toCharArray(), hashPassword);

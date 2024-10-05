@@ -2,6 +2,7 @@ package com.library.util.errors.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.library.util.errors.throwables.ApplicationIOException;
 import com.library.util.errors.throwables.ApplicationRuntimeException;
 import com.library.util.errors.throwables.ApplicationServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,6 +53,11 @@ public class ServerHttpErrorHandler extends ErrorHandler {
             message = applicationServletException.getMessage();
             cause = applicationServletException.getCause();
 
+        } else if (throwable instanceof ApplicationIOException applicationIOException) {
+            statusCode = applicationIOException.getHttpStatus();
+            message = applicationIOException.getMessage();
+            cause = applicationIOException.getCause();
+
         } else if (rootCause != null) {
             message = rootCause.getMessage();
             if (rootCause instanceof ApplicationRuntimeException appException) {
@@ -60,8 +66,8 @@ public class ServerHttpErrorHandler extends ErrorHandler {
         }
 
         response.setStatus(statusCode);
-        jsonResponse.put("status", statusCode);
         jsonResponse.put("message", message != null ? message : "Erro desconhecido");
+        jsonResponse.put("status", statusCode);
 
         if (cause != null) {
             jsonResponse.put("cause", cause.getMessage());

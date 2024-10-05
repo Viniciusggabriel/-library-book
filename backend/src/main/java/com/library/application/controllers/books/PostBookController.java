@@ -20,6 +20,15 @@ public class PostBookController extends HttpServlet {
         this.bookCrudService = new BookCrudService();
     }
 
+    /**
+     * <h3>Método para inserir livros dentro do banco de dados</h3>
+     * <p>Le o payload da requisição, e chamar o service com os valores obtidos</p>
+     *
+     * @param req  -> <strong>Requisição do usuário</strong>
+     * @param resp -> <strong>Resposta a ser retornada</strong>
+     * @throws ServletException -> <strong>Tratamento de erros http</strong>
+     * @throws IOException      -> <strong>Tratamento de erros de entrada e saida de dados</strong>
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=utf-8");

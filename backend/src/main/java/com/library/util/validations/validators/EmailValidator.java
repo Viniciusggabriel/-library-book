@@ -11,6 +11,13 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
     public void initialize(ValidEmail constraintAnnotation) {
     }
 
+    /**
+     * <h3>Método para validar pattern de email</h3>
+     *
+     * @param email   -> <strong>Numero de email a ser validado</strong>
+     * @param context -> <strong>Contexto a ser retornado</strong>
+     * @return boolean -> <strong>Status da validação</strong>
+     */
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if (email == null) {

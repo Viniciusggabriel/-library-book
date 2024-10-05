@@ -11,6 +11,13 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
     public void initialize(ValidPhoneNumber constraintAnnotation) {
     }
 
+    /**
+     * <h3>Método para validar pattern de numero de telefone +dd</h3>
+     *
+     * @param phoneNumber -> <strong>Numero de telefone a ser validado</strong>
+     * @param context     -> <strong>Contexto a ser retornado</strong>
+     * @return boolean -> <strong>Status da validação</strong>
+     */
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
         if (phoneNumber == null) {

@@ -19,6 +19,13 @@ public class BookCrudService {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
     }
 
+    /**
+     * <h3>Método de service para buscar um livro baseado nos ID</h3>
+     *
+     * @param idBook -> <strong>Id do livro a ser buscado</strong>
+     * @return char[] -> <strong>Json com o livro encontrado</strong>
+     * @throws MalformedJsonException -> <strong>Exception para json com erros de formação</strong>
+     */
     public char[] getBookById(Long idBook) throws MalformedJsonException {
         Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
@@ -30,9 +37,15 @@ public class BookCrudService {
                 bookInDatabase.getDsReleaseDate(),
                 bookInDatabase.getDsSummary()
         );
+
         return ManipulateJsonObject.readJson(bookResponse);
     }
 
+    /**
+     * <h3>Método para inserir um livro dentro do banco de dados</h3>
+     *
+     * @param bookRequest -> <strong>DOT obtido do usuário via payload http</strong>
+     */
     public void postBook(BookRequest bookRequest) {
         this.bookRequest = new Book();
 

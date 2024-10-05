@@ -2,7 +2,6 @@ package com.library.application.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.LocalDateTime;
 
 import java.time.ZonedDateTime;
 

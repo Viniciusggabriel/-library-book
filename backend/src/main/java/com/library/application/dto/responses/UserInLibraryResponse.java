@@ -10,6 +10,5 @@ public record UserInLibraryResponse(
 
         @JsonProperty("username")
         String dsUserName
-
 ) {
 }
