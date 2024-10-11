@@ -1,5 +1,6 @@
 package com.library.util.errors.exceptions;
 
+import com.fasterxml.jackson.core.JsonLocation;
 import com.library.util.errors.throwables.ApplicationRuntimeException;
 import lombok.Getter;
 

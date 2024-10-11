@@ -29,7 +29,7 @@ public class ManipulateJsonObject {
             return objectMapper.readValue(stringBuilder.toString(), tClass);
         } catch (UnrecognizedPropertyException exception) {
             throw new InvalidJsonPropertyException(
-                    String.format("Json malformado verifique as chaves e valores do seu Json: %s", exception.getLocation()),
+                    "Json malformado verifique as chaves e valores do seu Json!",
                     HttpStatus.BAD_REQUEST_400,
                     exception.getCause());
 

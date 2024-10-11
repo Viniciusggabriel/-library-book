@@ -6,10 +6,12 @@ import com.library.application.models.Book;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.database.repositories.contracts.BookRepository;
 import com.library.util.errors.exceptions.EntityAttributeAccessException;
+import com.library.util.errors.exceptions.InvalidRequestPayloadException;
 import com.library.util.errors.exceptions.MalformedJsonException;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.utilitarian.UpdateObjectFields;
 import lombok.RequiredArgsConstructor;
+import org.eclipse.jetty.http.HttpStatus;
 
 @RequiredArgsConstructor
 public class BookCrudService {
@@ -47,7 +49,7 @@ public class BookCrudService {
      *
      * @param bookRequest -> <strong>DOT obtido do usuário via payload http</strong>
      */
-    public void postBook(BookRequest bookRequest) {
+    public void postBook(BookRequest bookRequest) throws InvalidRequestPayloadException {
         this.bookRequest = new Book();
 
         this.bookRequest.setDsBookName(bookRequest.dsBookName());
@@ -56,7 +58,11 @@ public class BookCrudService {
         this.bookRequest.setDsSummary(bookRequest.dsSummary());
         this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
-        bookRepository.insertEntity(this.bookRequest);
+        try {
+            bookRepository.insertEntity(this.bookRequest);
+        } catch (IllegalArgumentException exception) {
+            throw new InvalidRequestPayloadException(exception.getMessage(), HttpStatus.BAD_REQUEST_400);
+        }
     }
 
     /**
