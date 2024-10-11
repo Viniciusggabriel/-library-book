@@ -21,7 +21,7 @@ public class ValidateUrlParameter {
         try {
             return Long.valueOf(idBook);
         } catch (NumberFormatException exception) {
-            throw new InvalidRequestPathParameterException("O id da requisição deve ser um número válido!", HttpStatus.BAD_REQUEST_400, new RuntimeException(exception.getMessage()));
+            throw new InvalidRequestPathParameterException(String.format("O id da requisição deve ser um número válido: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
     }
 }

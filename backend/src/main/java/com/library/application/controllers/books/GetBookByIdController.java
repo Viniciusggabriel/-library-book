@@ -39,7 +39,7 @@ public class GetBookByIdController extends HttpServlet {
             extractIdBook = extractIdBook(req);
             idBook = ValidateUrlParameter.validateLongId(extractIdBook);
         } catch (InvalidRequestPathParameterException exception) {
-            throw new InvalidRequestPathParameterException(exception.getMessage(), exception.getHttpStatus(), exception.getCause());
+            throw new InvalidRequestPathParameterException(exception.getMessage(), HttpStatus.BAD_REQUEST_400);
         }
 
         char[] jsonBook;
