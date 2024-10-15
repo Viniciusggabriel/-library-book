@@ -5,11 +5,10 @@ import com.library.application.dto.responses.BookResponse;
 import com.library.application.models.Book;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.database.repositories.contracts.BookRepository;
-import com.library.util.errors.exceptions.EntityAttributeAccessException;
-import com.library.util.errors.exceptions.InvalidRequestPayloadException;
-import com.library.util.errors.exceptions.MalformedJsonException;
+import com.library.util.errors.exceptions.*;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.utilitarian.UpdateObjectFields;
+import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -89,6 +88,13 @@ public class BookCrudService {
         } catch (EntityAttributeAccessException exception) {
             throw new EntityAttributeAccessException(exception.getMessage(), exception.getStatusCode());
         }
+    }
 
+    public void deleteBook(Long idBook) {
+        try {
+            bookRepository.deleteEntity(idBook);
+        } catch (EntityAttributeAccessException exception) {
+            throw new EntityAttributeAccessException(exception.getMessage(), exception.getStatusCode());
+        }
     }
 }

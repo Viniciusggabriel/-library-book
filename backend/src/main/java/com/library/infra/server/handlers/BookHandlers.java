@@ -1,5 +1,6 @@
 package com.library.infra.server.handlers;
 
+import com.library.application.controllers.books.DeleteBookController;
 import com.library.application.controllers.books.GetBookByIdController;
 import com.library.application.controllers.books.PutBookController;
 import com.library.application.controllers.books.PostBookController;
@@ -22,6 +23,7 @@ public class BookHandlers {
         servletContextHandler.addServlet(new ServletHolder(new GetBookByIdController()), "/list/book/*");
         servletContextHandler.addServlet(new ServletHolder(new PutBookController()), "/update/book/*");
         servletContextHandler.addServlet(new ServletHolder(new PostBookController()), "/insert/book");
+        servletContextHandler.addServlet(new ServletHolder(new DeleteBookController()), "/delete/book/*");
 
         return servletContextHandler;
     }
