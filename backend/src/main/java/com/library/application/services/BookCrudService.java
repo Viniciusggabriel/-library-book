@@ -90,11 +90,9 @@ public class BookCrudService {
         }
     }
 
-    public void deleteBook(Long idBook) {
-        try {
-            bookRepository.deleteEntity(idBook);
-        } catch (EntityAttributeAccessException exception) {
-            throw new EntityAttributeAccessException(exception.getMessage(), exception.getStatusCode());
-        }
+    public void deleteBook(Long idBook) throws MalformedJsonException {
+        getBookById(idBook);
+
+        bookRepository.deleteEntity(idBook);
     }
 }

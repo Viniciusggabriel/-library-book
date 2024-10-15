@@ -54,9 +54,8 @@ public class UpdateObjectFields {
                     field.set(target, valueSource);
                 }
             } catch (IllegalAccessException exception) {
-                throw new EntityAttributeAccessException(
-                        String.format("Erro ao acessar valor do objeto: %s", exception.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR_500
+                throw new RuntimeException(
+                        String.format("Erro ao acessar valor do objeto: %s", exception.getMessage())
                 );
             }
         }

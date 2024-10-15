@@ -2,10 +2,7 @@ package com.library.application.controllers.books;
 
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
-import com.library.util.errors.exceptions.ErrorMakingRequestException;
-import com.library.util.errors.exceptions.InputOutputDataException;
-import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
-import com.library.util.errors.exceptions.MalformedJsonException;
+import com.library.util.errors.exceptions.*;
 import com.library.util.errors.handlers.JacksonErrorHandler;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.validations.validators.ValidateUrlParameter;
@@ -56,20 +53,16 @@ public class PutBookController extends HttpServlet {
             BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
 
             String jsonBook;
-            try {
-                // Atualiza o livro
-                bookCrudService.putBook(bookRequest, idBook);
 
-                // Recupera o livro atualizado
-                char[] bookChars = bookCrudService.getBookById(idBook);
-                if (bookChars == null) {
-                    throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
-                }
-                jsonBook = new String(bookChars);  // Converte char[] para String
+            // Atualiza o livro
+            bookCrudService.putBook(bookRequest, idBook);
 
-            } catch (Exception exception) {
-                throw new ErrorMakingRequestException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502);
+            // Recupera o livro atualizado
+            char[] bookChars = bookCrudService.getBookById(idBook);
+            if (bookChars == null) {
+                throw new MalformedJsonException("Erro ao montar json com o livro!", HttpStatus.INTERNAL_SERVER_ERROR_500);
             }
+            jsonBook = new String(bookChars);  // Converte char[] para String
 
             // Envia a resposta com o livro atualizado
             resp.setContentType("application/json;charset=utf-8");
@@ -78,6 +71,8 @@ public class PutBookController extends HttpServlet {
 
         } catch (RuntimeException exception) {
             JacksonErrorHandler.handleException(exception, resp);
+        } catch (IllegalAccessException exception) {
+            throw new RuntimeException(exception);
         }
     }
 

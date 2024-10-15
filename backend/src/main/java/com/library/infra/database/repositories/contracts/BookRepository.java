@@ -85,8 +85,8 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
      */
     @Override
     public void deleteEntity(Long id) {
-        Book bookInDatabase = selectEntityById(id);
-
-        database.delete(bookInDatabase);
+        Optional<Book> expectedBook = Optional.ofNullable(database.find(Book.class, id));
+        expectedBook.ifPresent(database::delete);
+        expectedBook.orElseThrow(() -> new ValueNotFoundException("O livro a ser deletado não encontrado!", HttpStatus.BAD_REQUEST_400));
     }
 }

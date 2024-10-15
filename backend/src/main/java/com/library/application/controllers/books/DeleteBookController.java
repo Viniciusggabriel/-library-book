@@ -4,6 +4,8 @@ import com.library.application.services.BookCrudService;
 import com.library.util.errors.exceptions.ErrorMakingRequestException;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
 import com.library.util.errors.exceptions.MalformedJsonException;
+import com.library.util.errors.exceptions.ValueNotFoundException;
+import com.library.util.errors.handlers.JacksonErrorHandler;
 import com.library.util.validations.validators.ValidateUrlParameter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
@@ -24,31 +26,24 @@ public class DeleteBookController extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String extractIdBook = null;
+        resp.setContentType("application/json;charset=utf-8");
         Long idBook = null;
 
         try {
-            extractIdBook = extractIdBook(req);
+            String extractIdBook = extractIdBook(req);
             idBook = ValidateUrlParameter.validateLongId(extractIdBook);
-        } catch (InvalidRequestPathParameterException e) {
-            throw new InvalidRequestPathParameterException(e.getMessage(), HttpStatus.BAD_REQUEST_400);
+        } catch (InvalidRequestPathParameterException exception) {
+            JacksonErrorHandler.handleException(exception, resp);
         }
 
         try {
-            bookCrudService.getBookById(idBook);
-
             bookCrudService.deleteBook(idBook);
-
-            resp.setContentType("application/json;charset=utf-8");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write("Sucesso ao excluir livro!");
-        } catch (EntityNotFoundException exception) {
-            throw new ErrorMakingRequestException("Livro não encontrado", HttpStatus.NOT_FOUND_404);
         } catch (RuntimeException exception) {
-            throw new ErrorMakingRequestException("Erro ao processar requisição", HttpStatus.BAD_REQUEST_400);
-        } catch (Exception exception) {
-            throw new ErrorMakingRequestException(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR_500);
+            JacksonErrorHandler.handleException(exception, resp);
         }
+
+        resp.getWriter().write("Sucesso ao excluir livro!");
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     /**

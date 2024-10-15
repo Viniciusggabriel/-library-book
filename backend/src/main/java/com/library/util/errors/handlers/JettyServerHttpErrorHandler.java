@@ -43,6 +43,11 @@ public class JettyServerHttpErrorHandler extends ErrorHandler {
         Throwable cause = baseRequest.read().getFailure();
 
         Throwable throwable = (Throwable) request.getAttribute("jakarta.servlet.error.exception");
+
+        if (throwable == null) {
+            throwable = baseRequest.read().getFailure();
+        }
+
         Throwable rootCause = throwable != null ? getRootCause(throwable) : null;
 
         if (throwable instanceof ApplicationRuntimeException applicationRuntimeException) {

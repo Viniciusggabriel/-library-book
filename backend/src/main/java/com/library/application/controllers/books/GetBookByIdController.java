@@ -42,15 +42,10 @@ public class GetBookByIdController extends HttpServlet {
             throw new InvalidRequestPathParameterException(exception.getMessage(), HttpStatus.BAD_REQUEST_400);
         }
 
-        char[] jsonBook;
-        try {
-            jsonBook = bookCrudService.getBookById(idBook);
+        char[] jsonBook = bookCrudService.getBookById(idBook);
 
-            if (jsonBook == null)
-                throw new ServletException("Erro ao montar json com o livro!");
-        } catch (Exception exception) {
-            throw new ErrorMakingRequestException(exception.getMessage(), HttpStatus.BAD_GATEWAY_502);
-        }
+        if (jsonBook == null)
+            throw new ServletException("Erro ao montar json com o livro!");
 
         resp.setContentType("application/json;charset=utf-8");
         resp.setStatus(HttpServletResponse.SC_OK);
