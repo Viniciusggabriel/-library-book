@@ -46,7 +46,7 @@ public class PostBookController extends HttpServlet {
             throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
 
-        BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
+        BookRequest bookRequest = ManipulateJsonObject.readJson(stringBuilder, BookRequest.class);
         bookCrudService.postBook(bookRequest);
 
         resp.setStatus(HttpServletResponse.SC_CREATED);

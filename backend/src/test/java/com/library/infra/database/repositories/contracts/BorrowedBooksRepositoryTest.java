@@ -156,7 +156,7 @@ class BorrowedBooksRepositoryTest {
             borrowedBooksRepository.insertEntity(bookInArray);
         });
 
-        List<BorrowedBooks> borrowedBooksList = borrowedBooksRepository.selectEntities(6);
+        List<BorrowedBooks> borrowedBooksList = borrowedBooksRepository.selectEntities(6,1);
         borrowedBooksList.forEach(bookInArray -> logger.info("Empréstimos foram listados de forma correta: {}", bookInArray));
     }
 }

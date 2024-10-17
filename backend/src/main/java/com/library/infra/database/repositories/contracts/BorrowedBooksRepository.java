@@ -22,8 +22,8 @@ public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<
     private static final EntityFinder<Long, BorrowedBooks> finder = new EntityFinder<>(BorrowedBooks.class);
 
     @Override
-    public List<BorrowedBooks> selectEntities(Integer sizeRows) {
-        return finder.findAll("idBorrowed", sizeRows).getList();
+    public List<BorrowedBooks> selectEntities(Integer sizeRows, Integer page) {
+        return finder.findAll("idBorrowed", sizeRows, page).getList();
     }
 
     @Override

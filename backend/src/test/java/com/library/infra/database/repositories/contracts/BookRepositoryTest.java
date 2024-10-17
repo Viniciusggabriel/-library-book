@@ -104,7 +104,7 @@ class BookRepositoryTest {
             bookRepository.insertEntity(bookInArray);
         });
 
-        List<Book> booksList = bookRepository.selectEntities(6);
+        List<Book> booksList = bookRepository.selectEntities(6,1);
         booksList.forEach(bookInArray -> logger.info("Livros foram listados de forma correta: {}", bookInArray));
     }
 }

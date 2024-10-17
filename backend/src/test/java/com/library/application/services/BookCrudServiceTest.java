@@ -17,7 +17,6 @@ class BookCrudServiceTest {
 
     @Test
     public void crudService() {
-
     }
 
     @Test
@@ -27,15 +26,6 @@ class BookCrudServiceTest {
 
     @Test
     public void getBookByID() throws MalformedJsonException {
-        BookRequest bookRequest = new BookRequest(
-                "Manifesto Comunista",
-                "Karl Marx",
-                ZonedDateTime.now().withNano(0),
-                "Livro sobre ideia econômica",
-                1
-        );
 
-        bookCrudService.getBookById(1L);
     }
-
 }

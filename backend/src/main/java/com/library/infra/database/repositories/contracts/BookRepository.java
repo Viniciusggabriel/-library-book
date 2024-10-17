@@ -26,8 +26,8 @@ public class BookRepository implements BaseRepositories.CrudRepository<Book, Lon
      * @return List<Book> -> <strong>Lista com os livros dentro do banco de dados páginados</strong>
      */
     @Override
-    public List<Book> selectEntities(Integer sizeRows) {
-        return finder.findAll("dsBookName", sizeRows).getList();
+    public List<Book> selectEntities(Integer sizeRows, Integer page) {
+        return finder.findAll("dsBookName", sizeRows, page).getList();
     }
 
     /**

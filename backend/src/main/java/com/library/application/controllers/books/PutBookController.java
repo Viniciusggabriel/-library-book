@@ -50,7 +50,7 @@ public class PutBookController extends HttpServlet {
             StringBuilder stringBuilder = getStringBuilder(req);
 
             // Converte o JSON para um objeto BookRequest
-            BookRequest bookRequest = ManipulateJsonObject.generateJson(stringBuilder, BookRequest.class);
+            BookRequest bookRequest = ManipulateJsonObject.readJson(stringBuilder, BookRequest.class);
 
             String jsonBook;
 

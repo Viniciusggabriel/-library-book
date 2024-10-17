@@ -9,6 +9,8 @@ import com.library.util.errors.exceptions.InvalidJsonPropertyException;
 import com.library.util.errors.exceptions.MalformedJsonException;
 import org.eclipse.jetty.http.HttpStatus;
 
+import java.util.List;
+
 public class ManipulateJsonObject {
 
     /**
@@ -21,7 +23,7 @@ public class ManipulateJsonObject {
      * @return T -> <strong>Retorno baseado no tipo generico</strong>
      * @throws JsonProcessingException -> <strong>Exception para erros ao montar ojson</strong>
      */
-    public static <T> T generateJson(StringBuilder stringBuilder, Class<T> tClass) throws JsonProcessingException {
+    public static <T> T readJson(StringBuilder stringBuilder, Class<T> tClass) throws JsonProcessingException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
@@ -50,7 +52,7 @@ public class ManipulateJsonObject {
      * @return char[] -> <strong>Json após ser lido é transformado em um array de char</strong>
      * @throws MalformedJsonException -> <strong>Exception para erros ao ler o json</strong>
      */
-    public static <T> char[] readJson(T object) throws MalformedJsonException {
+    public static <T> char[] generateJson(T object) throws MalformedJsonException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String json;
@@ -62,5 +64,20 @@ public class ManipulateJsonObject {
         }
 
         return json.toCharArray();
+    }
+
+    public static <T> String generateListJson(List<char[]> list) {
+        StringBuilder jsonBuilder = new StringBuilder("[");
+
+        for (char[] jsonBook : list) {
+            jsonBuilder.append(jsonBook).append(",");
+        }
+
+        if (!list.isEmpty()) {
+            jsonBuilder.deleteCharAt(jsonBuilder.length() - 1);
+        }
+
+        jsonBuilder.append("]");
+        return jsonBuilder.toString();
     }
 }

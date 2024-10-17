@@ -8,9 +8,11 @@ import com.library.infra.database.repositories.contracts.BookRepository;
 import com.library.util.errors.exceptions.*;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.utilitarian.UpdateObjectFields;
-import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class BookCrudService {
@@ -40,7 +42,28 @@ public class BookCrudService {
                 bookInDatabase.getDsSummary()
         );
 
-        return ManipulateJsonObject.readJson(bookResponse);
+        return ManipulateJsonObject.generateJson(bookResponse);
+    }
+
+    public List<char[]> getAllBooks(Integer sizeRows, Integer page) throws MalformedJsonException {
+        List<Book> books = bookRepository.selectEntities(sizeRows, page);
+        List<char[]> bookResponseList = new ArrayList<>();
+
+        BookResponse bookResponse;
+        for (Book book : books) {
+            bookResponse = BookResponse.of(
+                    book.getIdBook(),
+                    book.getDsQuantityBooks(),
+                    book.getDsBookName(),
+                    book.getDsAuthorName(),
+                    book.getDsReleaseDate(),
+                    book.getDsSummary()
+            );
+
+            bookResponseList.add(ManipulateJsonObject.generateJson(bookResponse));
+        }
+
+        return bookResponseList;
     }
 
     /**
@@ -90,6 +113,12 @@ public class BookCrudService {
         }
     }
 
+    /**
+     * <h3>Método para deletar um livro dentro do banco de dados</h3>
+     *
+     * @param idBook -> <strong>ID do livro a ser deletádo</strong>
+     * @throws MalformedJsonException -> <strong>Exception exigida pelo método de busca do livro</strong>
+     */
     public void deleteBook(Long idBook) throws MalformedJsonException {
         getBookById(idBook);
 

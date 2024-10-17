@@ -1,5 +1,7 @@
 package com.library.infra.database.repositories;
 
+import com.library.application.models.Book;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +11,7 @@ import java.util.UUID;
 public interface BaseRepositories {
 
     interface CrudRepository<T, ID> {
-        default List<T> selectEntities(Integer sizeRows) {
+        default List<T> selectEntities(Integer sizeRows, Integer page) {
             return List.of();
         }
 

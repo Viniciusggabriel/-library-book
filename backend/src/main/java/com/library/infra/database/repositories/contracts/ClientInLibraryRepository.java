@@ -29,8 +29,8 @@ public class ClientInLibraryRepository implements BaseRepositories.CrudRepositor
      * @return List<Book> -> <strong>Lista com os clientes dentro do banco de dados páginados</strong>
      */
     @Override
-    public List<ClientInLibrary> selectEntities(Integer sizeRows) {
-        return finder.findAll("dsClientName", sizeRows).getList();
+    public List<ClientInLibrary> selectEntities(Integer sizeRows, Integer page) {
+        return finder.findAll("dsClientName", sizeRows, page).getList();
     }
 
     /**

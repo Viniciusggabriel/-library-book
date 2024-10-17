@@ -16,8 +16,9 @@ public class EntityFinder<ID, T> extends Finder<ID, T> {
      * @param size          -> <strong>Tamanho de linhas a ser requisitados</strong>
      * @return PagedList<T> -> <strong>Retorna um SQL paginado</strong>
      */
-    public PagedList<T> findAll(String attributeBook, Integer size) {
-        return query().where().orderBy().asc(attributeBook).setMaxRows(size).findPagedList();
+    public PagedList<T> findAll(String attributeBook, Integer size, Integer page) {
+        int offset = (page - 1) * size;
+        return query().where().orderBy().asc(attributeBook).setFirstRow(offset).setMaxRows(size).findPagedList();
     }
 
     /**
