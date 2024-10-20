@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookCrudService {
     private final BookRepository bookRepository;
-    private Book bookRequest;
+    private Book entity;
 
     public BookCrudService() {
         this.bookRepository = new BookRepository(DataBaseSourceConfig.getDatabase());
@@ -47,6 +47,16 @@ public class BookCrudService {
         return ManipulateJsonObject.generateJson(bookResponse);
     }
 
+    /**
+     * <h3>Método para pegar todos os livros presentes no banco de dados</h3>
+     * <p>Primeiro ele instancia uma busca de formato de paginação para o repositório</p>
+     * <p>Após isso cria uma lista de char[] e move todos as entidades obtidas para a lista de char, após isso já é instanciado a classe de geração de json em formato de array</p>
+     *
+     * @param sizeRows -> <strong>Tamanho itens a serem buscados</strong>
+     * @param page     -> <strong>Qual pagina está sendo buscada</strong>
+     * @return List<char [ ]> -> <strong>Uma lista com os chars do json</strong>
+     * @throws MalformedJsonException -> <strong>Exception para quando o json foi malformado</strong>
+     */
     public List<char[]> getAllBooks(Integer sizeRows, Integer page) throws MalformedJsonException {
         List<Book> books = bookRepository.selectEntities(sizeRows, page);
         List<char[]> bookResponseList = new ArrayList<>();
@@ -74,16 +84,16 @@ public class BookCrudService {
      * @param bookRequest -> <strong>DOT obtido do usuário via payload http</strong>
      */
     public void postBook(BookRequest bookRequest) throws InvalidRequestPayloadException {
-        this.bookRequest = new Book();
+        this.entity = new Book();
 
-        this.bookRequest.setDsBookName(bookRequest.dsBookName());
-        this.bookRequest.setDsAuthorName(bookRequest.dsAuthorName());
-        this.bookRequest.setDsReleaseDate(bookRequest.dsReleaseDate());
-        this.bookRequest.setDsSummary(bookRequest.dsSummary());
-        this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
+        this.entity.setDsBookName(bookRequest.dsBookName());
+        this.entity.setDsAuthorName(bookRequest.dsAuthorName());
+        this.entity.setDsReleaseDate(bookRequest.dsReleaseDate());
+        this.entity.setDsSummary(bookRequest.dsSummary());
+        this.entity.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
         try {
-            bookRepository.insertEntity(this.bookRequest);
+            bookRepository.insertEntity(this.entity);
         } catch (IllegalArgumentException exception) {
             throw new InvalidRequestPayloadException(exception.getMessage(), HttpStatus.BAD_REQUEST_400);
         }
@@ -91,7 +101,7 @@ public class BookCrudService {
 
     /**
      * <h3>Método para realizar patch em um livro dentro do banco de dados</h3>
-     * <p>O método instancia um novo objeto de entidade e seta os valores obtidos do payload via controller, após isso executa o método de update do repósitorio, passando a entiade e o ID do livro, após isso chama o método da mesma classe para buscar o livro e retornar ele alterado para o usuário</p>
+     * <p>O método instancia um novo objeto de entidade e seta os valores obtidos do payload via controller, após isso executa o método de update do repositório, passando a entidade e o ID do livro, após isso chama o método da mesma classe para buscar o livro e retornar ele alterado para o usuário</p>
      *
      * @param bookRequest -> <strong>DTO obtido pelo controller para busca de dados</strong>
      * @param idBook      -> <strong>Id do livro a ser buscado</strong>
@@ -100,15 +110,15 @@ public class BookCrudService {
     public void putBook(BookRequest bookRequest, Long idBook) throws IllegalAccessException {
         Book bookInDatabase = bookRepository.selectEntityById(idBook);
 
-        this.bookRequest = new Book();
-        this.bookRequest.setDsBookName(bookRequest.dsBookName());
-        this.bookRequest.setDsAuthorName(bookRequest.dsAuthorName());
-        this.bookRequest.setDsReleaseDate(bookRequest.dsReleaseDate());
-        this.bookRequest.setDsSummary(bookRequest.dsSummary());
-        this.bookRequest.setDsQuantityBooks(bookRequest.dsQuantityBooks());
+        this.entity = new Book();
+        this.entity.setDsBookName(bookRequest.dsBookName());
+        this.entity.setDsAuthorName(bookRequest.dsAuthorName());
+        this.entity.setDsReleaseDate(bookRequest.dsReleaseDate());
+        this.entity.setDsSummary(bookRequest.dsSummary());
+        this.entity.setDsQuantityBooks(bookRequest.dsQuantityBooks());
 
         try {
-            UpdateObjectFields.updatedObject(bookInDatabase, this.bookRequest);
+            UpdateObjectFields.updatedObject(bookInDatabase, this.entity);
             bookRepository.updateEntity(bookInDatabase, idBook);
         } catch (EntityAttributeAccessException exception) {
             throw new EntityAttributeAccessException(exception.getMessage(), exception.getStatusCode());
