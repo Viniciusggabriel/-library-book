@@ -2,14 +2,10 @@ package com.library.infra.server.configs;
 
 import com.library.infra.server.connectors.ConectorServerHttp;
 import org.eclipse.jetty.ee10.servlet.ErrorHandler;
-import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.RequestLogWriter;
 import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.TimeZone;
 
 public class ServerHttpConfig {
     private static final Logger logger = LoggerFactory.getLogger(ServerHttpConfig.class);

@@ -10,16 +10,14 @@ import io.ebean.Database;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.http.HttpStatus;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
 
 @RequiredArgsConstructor
 public class BorrowedBooksRepository implements BaseRepositories.CrudRepository<BorrowedBooks, Long> {
-    private final Database database;
-
     private static final EntityFinder<Long, BorrowedBooks> finder = new EntityFinder<>(BorrowedBooks.class);
+    private final Database database;
 
     @Override
     public List<BorrowedBooks> selectEntities(Integer sizeRows, Integer page) {

@@ -1,7 +1,6 @@
 package com.library.application.controllers.books;
 
 import com.library.application.services.BookCrudService;
-import com.library.util.errors.exceptions.ErrorMakingRequestException;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
 import com.library.util.validations.validators.ValidateUrlParameter;
 import jakarta.servlet.ServletException;

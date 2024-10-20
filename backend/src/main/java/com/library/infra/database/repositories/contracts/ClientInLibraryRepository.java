@@ -17,9 +17,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ClientInLibraryRepository implements BaseRepositories.CrudRepository<ClientInLibrary, UUID> {
-    private final Database database;
-
     private static final EntityFinder<UUID, ClientInLibrary> finder = new EntityFinder<>(ClientInLibrary.class);
+    private final Database database;
 
     /**
      * <h3>Método responsável por buscar vários clientes de forma paginada dentro do banco de dados</h3>

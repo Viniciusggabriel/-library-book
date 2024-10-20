@@ -2,7 +2,6 @@ package com.library.util.errors.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.library.util.errors.exceptions.InvalidJsonPropertyException;
 import com.library.util.errors.throwables.ApplicationIOException;
 import com.library.util.errors.throwables.ApplicationRuntimeException;
 import com.library.util.errors.throwables.ApplicationServletException;

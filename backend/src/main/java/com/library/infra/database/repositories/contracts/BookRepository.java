@@ -14,9 +14,8 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class BookRepository implements BaseRepositories.CrudRepository<Book, Long> {
-    private final Database database;
-
     private static final EntityFinder<Long, Book> finder = new EntityFinder<>(Book.class);
+    private final Database database;
 
     /**
      * <h3>Método responsável por buscar vários livros de forma paginada dentro do banco de dados</h3>

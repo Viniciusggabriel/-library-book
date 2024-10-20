@@ -1,7 +1,5 @@
 package com.library.infra.database.repositories;
 
-import com.library.application.models.Book;
-
 import java.util.List;
 import java.util.UUID;
 

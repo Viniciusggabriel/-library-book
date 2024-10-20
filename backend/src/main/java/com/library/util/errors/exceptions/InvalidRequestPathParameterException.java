@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class InvalidRequestPathParameterException extends ApplicationRuntimeException {
- /**
+    /**
      * <h3>Exception que extended a principal e lança os erros necessários</h3>
      *
      * @param message    -> <strong>Message de erro</strong>

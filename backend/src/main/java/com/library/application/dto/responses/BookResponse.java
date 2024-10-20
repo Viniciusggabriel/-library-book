@@ -16,24 +16,24 @@ public record BookResponse(
         @JsonProperty("_data_book")
         DataBook dataBook
 ) {
-        public static BookResponse of(Long idBook, Integer dsQuantityBooks, String dsBookName, String dsAuthorName, ZonedDateTime dsReleaseDate, String dsSummary) {
-                return new BookResponse(idBook, dsQuantityBooks, new DataBook(dsBookName, dsAuthorName, dsReleaseDate, dsSummary));
-        }
+    public static BookResponse of(Long idBook, Integer dsQuantityBooks, String dsBookName, String dsAuthorName, ZonedDateTime dsReleaseDate, String dsSummary) {
+        return new BookResponse(idBook, dsQuantityBooks, new DataBook(dsBookName, dsAuthorName, dsReleaseDate, dsSummary));
+    }
 
-        public record DataBook(
-                @JsonProperty("ds_book_name")
-                String dsBookName,
+    public record DataBook(
+            @JsonProperty("ds_book_name")
+            String dsBookName,
 
-                @JsonProperty("ds_author_name")
-                String dsAuthorName,
+            @JsonProperty("ds_author_name")
+            String dsAuthorName,
 
-                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-                @JsonProperty("ds_release_date")
-                ZonedDateTime dsReleaseDate,
+            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+            @JsonProperty("ds_release_date")
+            ZonedDateTime dsReleaseDate,
 
-                @JsonProperty("ds_summary")
-                String dsSummary
-        ) {
-        }
+            @JsonProperty("ds_summary")
+            String dsSummary
+    ) {
+    }
 }
 

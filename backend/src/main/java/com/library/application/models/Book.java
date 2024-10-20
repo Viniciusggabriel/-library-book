@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.LocalDateTime;
 
 import java.time.ZonedDateTime;
 import java.util.List;

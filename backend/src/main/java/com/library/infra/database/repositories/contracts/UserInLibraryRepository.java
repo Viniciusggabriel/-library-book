@@ -16,9 +16,8 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class UserInLibraryRepository implements BaseRepositories.UserRepository<UserInLibrary> {
-    private final Database database;
-
     private static final EntityFinder<UUID, UserInLibrary> finder = new EntityFinder<>(UserInLibrary.class);
+    private final Database database;
 
     /**
      * <h3>Método responsável por buscar o usuário pelo UUID</h3>

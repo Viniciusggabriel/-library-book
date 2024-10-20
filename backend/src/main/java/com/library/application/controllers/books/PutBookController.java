@@ -2,7 +2,9 @@ package com.library.application.controllers.books;
 
 import com.library.application.dto.requests.BookRequest;
 import com.library.application.services.BookCrudService;
-import com.library.util.errors.exceptions.*;
+import com.library.util.errors.exceptions.InputOutputDataException;
+import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
+import com.library.util.errors.exceptions.MalformedJsonException;
 import com.library.util.errors.handlers.JacksonErrorHandler;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import com.library.util.validations.validators.ValidateUrlParameter;
@@ -23,6 +25,28 @@ public class PutBookController extends HttpServlet {
 
     public PutBookController() {
         this.bookCrudService = new BookCrudService();
+    }
+
+    /**
+     * <h3>Método privado para gerar a string com o payload da requisição</h3>
+     * <p>Recebe a requisição http e monta um StringBuilder para poder realizar um buffer com os dados obtidos </p>
+     *
+     * @param req -> <strong>Requisição http</strong>
+     * @return StringBuilder -> <strong>String buffer com os dados recebidos da requisição</strong>
+     * @throws InputOutputDataException -> <strong>Exception para erros ao processar dados do json</strong>
+     */
+    private static StringBuilder getStringBuilder(HttpServletRequest req) throws InputOutputDataException {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader reader = req.getReader()) {
+            String lineJson;
+            while ((lineJson = reader.readLine()) != null) {
+                stringBuilder.append(lineJson);
+            }
+        } catch (IOException exception) {
+            throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
+        }
+
+        return stringBuilder;
     }
 
     /**
@@ -74,28 +98,6 @@ public class PutBookController extends HttpServlet {
         } catch (IllegalAccessException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    /**
-     * <h3>Método privado para gerar a string com o payload da requisição</h3>
-     * <p>Recebe a requisição http e monta um StringBuilder para poder realizar um buffer com os dados obtidos </p>
-     *
-     * @param req -> <strong>Requisição http</strong>
-     * @return StringBuilder -> <strong>String buffer com os dados recebidos da requisição</strong>
-     * @throws InputOutputDataException -> <strong>Exception para erros ao processar dados do json</strong>
-     */
-    private static StringBuilder getStringBuilder(HttpServletRequest req) throws InputOutputDataException {
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = req.getReader()) {
-            String lineJson;
-            while ((lineJson = reader.readLine()) != null) {
-                stringBuilder.append(lineJson);
-            }
-        } catch (IOException exception) {
-            throw new InputOutputDataException(String.format("Erro ao processar payload da requisição: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
-        }
-
-        return stringBuilder;
     }
 
     /**

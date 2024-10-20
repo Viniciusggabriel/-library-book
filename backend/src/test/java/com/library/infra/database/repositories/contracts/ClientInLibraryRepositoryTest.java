@@ -130,7 +130,7 @@ class ClientInLibraryRepositoryTest {
             clientInLibraryRepository.insertEntity(clientInArray);
         });
 
-        List<ClientInLibrary> clientsList = clientInLibraryRepository.selectEntities(6,1);
+        List<ClientInLibrary> clientsList = clientInLibraryRepository.selectEntities(6, 1);
         clientsList.forEach(bookInArray -> logger.info("Clientes foram listados de forma correta: {}", bookInArray));
     }
 }

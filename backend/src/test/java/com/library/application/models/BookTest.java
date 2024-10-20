@@ -26,7 +26,7 @@ class BookTest {
     }
 
     /**
-     *<h3> Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente</h3>
+     * <h3> Esse teste visa inserir, buscar e deletar um livro dentro do banco de dados de testes e verificar se o livro foi salvo corretamente</h3>
      */
     @Test
     public void insertFindDeleteBook() {

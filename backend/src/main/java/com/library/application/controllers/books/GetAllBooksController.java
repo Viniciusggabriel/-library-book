@@ -1,6 +1,5 @@
 package com.library.application.controllers.books;
 
-import com.library.application.dto.responses.BookResponse;
 import com.library.application.services.BookCrudService;
 import com.library.util.utilitarian.ManipulateJsonObject;
 import jakarta.servlet.ServletException;
