@@ -3,6 +3,8 @@ package com.library.util.validations.validators;
 import com.library.util.errors.exceptions.InvalidRequestPathParameterException;
 import org.eclipse.jetty.http.HttpStatus;
 
+import java.util.UUID;
+
 public class ValidateUrlParameter {
     /**
      * <h3>Método para validar se o valor pego pela requisição está correto</h3>
@@ -22,6 +24,14 @@ public class ValidateUrlParameter {
             return Long.valueOf(idBook);
         } catch (NumberFormatException exception) {
             throw new InvalidRequestPathParameterException(String.format("O id da requisição deve ser um número válido: %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
+        }
+    }
+
+    public static UUID validateUUIDId(String stringId) {
+        try {
+            return UUID.fromString(stringId);
+        } catch (IllegalArgumentException exception) {
+            throw new InvalidRequestPathParameterException(String.format("O id da requisição deve ser um uuid válido! %s", exception.getMessage()), HttpStatus.BAD_REQUEST_400);
         }
     }
 }

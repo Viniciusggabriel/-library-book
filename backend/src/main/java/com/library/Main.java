@@ -7,6 +7,7 @@ import com.library.application.models.UserInLibrary;
 import com.library.infra.database.configs.DataBaseSourceConfig;
 import com.library.infra.server.configs.ServerHttpConfig;
 import com.library.infra.server.handlers.BookHandlers;
+import com.library.infra.server.handlers.UserInLibraryHandlers;
 import com.library.util.errors.handlers.JettyServerHttpErrorHandler;
 import org.eclipse.jetty.ee10.servlet.ErrorHandler;
 import org.eclipse.jetty.server.Handler;
@@ -36,7 +37,8 @@ public class Main {
         // Define o servidor http da aplicação
         ServerHttpConfig.startServer(
                 new Handler[]{
-                        BookHandlers.setupBookHandler()
+                        BookHandlers.setupBookHandler(),
+                        UserInLibraryHandlers.setupUserInLibraryHandler()
                 },
                 new ErrorHandler[]{
                         new JettyServerHttpErrorHandler()

@@ -11,7 +11,6 @@ import org.eclipse.jetty.http.HttpStatus;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.library.infra.security.PasswordEncryption.setupBcrypt;
 import static com.library.infra.security.PasswordEncryption.verifyBcrypt;
 
 @RequiredArgsConstructor
@@ -22,6 +21,6 @@ public class AuthenticateUserInLibraryService {
         UserInLibrary user = Optional.ofNullable(finder.findByName("dsUserName", userInLibraryRequest.dsUserName()))
                 .orElseThrow(() -> new ValueNotFoundException("O usuário não foi encontrado!", HttpStatus.BAD_REQUEST_400));
 
-        return verifyBcrypt(userInLibraryRequest.dsPassword(), user.getDsPassword());
+        return verifyBcrypt(userInLibraryRequest.dsPassword(), user.getDsPassword()).verified;
     }
 }

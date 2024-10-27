@@ -21,6 +21,6 @@ public class UserInLibrary {
     @Column(name = "DS_USERNAME", nullable = false, unique = true, length = 30)
     private String dsUserName;
 
-    @Column(name = "DS_PASSWORD", nullable = false, length = 30)
+    @Column(name = "DS_PASSWORD", nullable = false, columnDefinition = "TEXT")
     private String dsPassword;
 }
