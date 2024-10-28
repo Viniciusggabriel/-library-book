@@ -49,6 +49,13 @@ dependencies {
 
     // Criptografia
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation("com.nimbusds:nimbus-jose-jwt:9.41.2")
+
+    //JWT
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt:0.12.6")
 
     // Dependências para reduzir verbosidade com Lombok
     compileOnly("org.projectlombok:lombok:1.18.34")
