@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+// TODO: Verificar o por que não estar realizando método corrétamente
 @RequiredArgsConstructor
 public class PutUserInLibraryController extends HttpServlet {
     private final UserInLibraryCrudService userInLibraryCrudService;
