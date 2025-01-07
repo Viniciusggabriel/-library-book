@@ -19,7 +19,7 @@ import java.util.function.Function;
 import static com.library.infra.security.JwtGenerateService.secretKeySpec;
 
 @RequiredArgsConstructor
-public class JwtExtractDataService {
+public class    JwtExtractDataService {
     private final JwtGenerateService jwtGenerateService;
 
     public static String extractUserName(String token) {

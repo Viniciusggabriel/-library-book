@@ -47,7 +47,7 @@ public class AuthenticateUserInLibraryController extends HttpServlet {
         boolean expectedAuthentication = authenticateUserInLibraryService.authenticateUserInLibrary(userInLibraryRequest);
 
         if (!expectedAuthentication) {
-            throw new InvalidRequestPayloadException("A sua autenticação falhou!", HttpStatus.BAD_REQUEST_400);
+            throw new InvalidRequestPayloadException("A autenticação falhou!", HttpStatus.BAD_REQUEST_400);
         }
 
         try {
